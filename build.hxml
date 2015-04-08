@@ -1,0 +1,9 @@
+-lib hxparse
+-lib utest
+-lib thx.core
+-cp src
+-cp test
+-js bin/test.js
+-main TestAll
+
+-cmd node bin/test.js
