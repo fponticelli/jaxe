@@ -1,0 +1,11 @@
+| Plain text can include <strong>html</strong>
+p
+  | It must always be on its own line
+
+p Plain text can include <strong>html</strong>
+
+script.
+  if (usingJade)
+    console.log('you are awesome')
+  else
+    console.log('use jade')
