@@ -1,4 +1,4 @@
-doctype html
+-doctype html
 html[lang=en]
   head
     title $pageTitle
@@ -9,9 +9,9 @@ html[lang=en]
   body
     h1 Jaxe - node template engine
     #container.col
-      $if(youAreUsingJaxe)
+      -if(youAreUsingJaxe)
         p You are amazing
-      $else
+      -else
         p Get on it!
       p.
         Jaxe is a terse and simple

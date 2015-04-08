@@ -1,8 +1,8 @@
 //- index.jx
-extends ./layout.jx
+-extends ./layout.jx
 
-block title
+-block title
   title Article Title
 
-block content
+-block content
   h1 My Article

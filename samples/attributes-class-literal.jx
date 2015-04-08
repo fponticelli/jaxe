@@ -1,2 +1,4 @@
 a.button
 .content
+.$myClass
+.$myClasses

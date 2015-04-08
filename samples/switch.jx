@@ -1,14 +1,14 @@
-$$
+-
   var friends = 10;
-$switch friends
-  $case 0
+-switch friends
+  -case 0
     p you have no friends
-  $case 1
+  -case 1
     p you have a friend
-  $default
+  -default
     p you have $friends friends
 
-$switch friends
-  $case 0:  p you have no friends
-  $case 1:  p you have a friend
-  $default: p you have $friends friends
+-switch friends
+  -case 0:  p you have no friends
+  -case 1:  p you have a friend
+  -default: p you have $friends friends
