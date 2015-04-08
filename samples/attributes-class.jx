@@ -1,0 +1,5 @@
+$$
+  var classes = ['foo', 'bar', 'baz'];
+a[class=classes]
+//- the class attribute may also be repeated to merge arrays
+a.bing[class=classes class=$['bing']]

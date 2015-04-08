@@ -1,0 +1,20 @@
+doctype html
+html[lang=en]
+  head
+    title $pageTitle
+    script[type=text/javascript].
+      if (foo) {
+         bar(1 + 5)
+      }
+  body
+    h1 Jaxe - node template engine
+    #container.col
+      $if(youAreUsingJaxe)
+        p You are amazing
+      $else
+        p Get on it!
+      p.
+        Jaxe is a terse and simple
+        templating language with a
+        strong focus on performance
+        and powerful features.
