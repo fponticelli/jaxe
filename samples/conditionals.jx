@@ -1,0 +1,20 @@
+$$
+  var user = { description: 'foo bar baz' },
+      authorized = false;
+#user
+  $if user.description
+    h2 Description
+    p.description $user.description
+  $else if authorized
+    h2 Description
+    p.description.
+      User has no description,
+      why not add one...
+  $else
+    h1 Description
+    p.description User has no description
+
+$unless user.isAnonymous
+  p You're logged in as $user.name
+$if(!user.isAnonymous)
+  p You're logged in as $user.name

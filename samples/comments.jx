@@ -1,0 +1,11 @@
+// just some paragraphs
+p foo
+p bar
+
+//- unbuffered comment / will not output within markup
+p foo
+p bar
+
+//
+	block
+	comment

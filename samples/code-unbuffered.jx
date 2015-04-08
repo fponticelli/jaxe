@@ -1,0 +1,5 @@
+$$
+	var a = [1,2,3];
+
+$for(v in a)
+	li item: ${v * 5}
