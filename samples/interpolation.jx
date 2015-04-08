@@ -1,0 +1,16 @@
+- var title = "On Dogs: Man's Best Friend";
+  var author = "enlore";
+  var theGreat = "<span>escape!</span>";
+  var msg = "not my inside voice";
+  var riskyBusiness = "<em>Some of the girls are wearing my mother's clothing.</em>";
+
+h1= title
+p Written with love by $author
+p This will be safe: $theGreat
+p This is $msg.toUpperCase()
+.quote
+  p Joel: !{riskyBusiness}
+p.
+  If you take a look at this page's source #{a[target="_blank", href="http://example.com"] on GitHub},
+  you'll see several places where the tag interpolation operator is
+  used, like so.
