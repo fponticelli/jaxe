@@ -4,7 +4,6 @@ Jade like template for Haxe
 TODO
 
 IDEAS:
-- [doctype](http://jade-lang.com/reference/doctype/)
 - [filters](http://jade-lang.com/reference/filters/)
 - [includes](http://jade-lang.com/reference/includes/)
 - [inheritance](http://jade-lang.com/reference/inheritance/)
