@@ -5,7 +5,6 @@ TODO
 
 IDEAS:
 - [filters](http://jade-lang.com/reference/filters/)
-- [includes](http://jade-lang.com/reference/includes/)
 - [inheritance](http://jade-lang.com/reference/inheritance/)
 - [interpolation](http://jade-lang.com/reference/interpolation/)
 - [iteration](http://jade-lang.com/reference/iteration/)
