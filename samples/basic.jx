@@ -18,3 +18,12 @@ html[lang=en]
         templating language with a
         strong focus on performance
         and powerful features.
+
+    ul
+    -for(i in 0...10)
+      li count $i
+
+    - var i = 0;
+    ul
+    -while(i++ < 10)
+      li count $i
