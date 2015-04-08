@@ -3,6 +3,11 @@ doctype html
 html
   head
     -block title
-      title Default title
+      title $title
+    -block scripts
+      script(src='/jquery.js')
   body
     -block content
+    -block foot
+      #footer
+        p some footer content
