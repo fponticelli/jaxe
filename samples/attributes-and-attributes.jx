@@ -1,4 +1,3 @@
 div#foo(data-bar="foo")&attributes({'data-foo': '-foo'})
--
-  var attributes = {'data-foo': 'bar'};
+- var attributes = {'data-foo': 'bar'};
 div#foo(data-bar="foo")&attributes(attributes)

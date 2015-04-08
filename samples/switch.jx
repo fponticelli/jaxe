@@ -1,5 +1,4 @@
--
-  var friends = 10;
+- var friends = 10;
 -switch friends
   -case 0
     p you have no friends
