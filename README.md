@@ -6,4 +6,3 @@ TODO
 IDEAS:
 - [filters](http://jade-lang.com/reference/filters/)
 - [mixins](http://jade-lang.com/reference/mixins/)
-- [tags](http://jade-lang.com/reference/tags/)
