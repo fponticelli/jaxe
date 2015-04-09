@@ -1,5 +1,11 @@
 package jaxe.core;
 
+enum ValueToken {
+	VExpression(expr : String);
+	VString(text : String);
+}
+
+/*
 typedef DomAttribute = {
 	name : String,
 	value : DomAttributeValue
@@ -22,3 +28,4 @@ enum DomAttributeValue {
 	VAString(text : String);
 	VABool(value : Bool);
 }
+*/
