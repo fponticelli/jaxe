@@ -16,16 +16,15 @@ class TestLexer {
 		];
 
 		for(test in tests)
-			assertValueLexer(test.expected, test.test);
+			assertLexer(test.expected, test.test);
 	}
 
-	function assertValueLexer(expected : Array<ValueToken>, test : String, ?pos : haxe.PosInfos) {
+	function assertLexer(expected : Array<ValueToken>, test : String, ?pos : haxe.PosInfos) {
 		var data = byte.ByteData.ofString(test);
-		var lexer = new ValueLexer(data, "test");
+		var lexer = new Lexer(data, "test");
 		var tokens = [];
 		try while (true) {
-			var t = lexer.token(ValueLexer.value);
-			trace(t);
+			var t = lexer.token(Lexer.value);
 			tokens.push(t);
 		} catch (e:Dynamic) { }
 		Assert.equals(expected.length, tokens.length, "number of expressions do not match for $expected and $tests");
