@@ -7,9 +7,16 @@ class TestLexer {
 	public function new() { }
 
 	public function testBasic() {
-		assertValueLexer([VString("text")], "text");
-		assertValueLexer([VExpression("name")], "$name");
-		assertValueLexer([VString("the name is "), VExpression("name")], "the name is $name");
+		var tests = [
+			{ test : "text", expected : [VString("text")] },
+			{ test : "$name", expected : [VExpression("name")] },
+			{ test : "the name is $name", expected : [VString("the name is "), VExpression("name")] },
+			{ test : "a$b c", expected : [VString("a"), VExpression("b"), VString(" c")] },
+			{ test : "a${b}c", expected : [VString("a"), VExpression("b"), VString("c")] },
+		];
+
+		for(test in tests)
+			assertValueLexer(test.expected, test.test);
 	}
 
 	function assertValueLexer(expected : Array<ValueToken>, test : String, ?pos : haxe.PosInfos) {
@@ -17,7 +24,9 @@ class TestLexer {
 		var lexer = new ValueLexer(data, "test");
 		var tokens = [];
 		try while (true) {
-			tokens.push(lexer.token(ValueLexer.value));
+			var t = lexer.token(ValueLexer.value);
+			trace(t);
+			tokens.push(t);
 		} catch (e:Dynamic) { }
 		Assert.same(expected, tokens, 'expected $test to parse to $expected but it is $tokens', pos);
 	}
