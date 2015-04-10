@@ -5,27 +5,21 @@ enum ValueToken {
 	TString(text : String, pos : hxparse.Position);
 }
 
-/*
-typedef DomAttribute = {
-	name : String,
-	value : DomAttributeValue
+enum DomToken {
+	TDoctype(type : Doctype);
+	TElement(name : String);
+	TClass(name : String);
+	TId(name : String);
 }
 
-enum DomNode {
-	DDoctype(value : String);
-	DElement(?name : String, attributes : Array<DomAttribute>, children : Array<DomNode>);
-	DComment(comment : DomValue);
-	DText(text : DomValue);
+enum Doctype {
+	HtmlDoctype;
+	XmlDoctype;
+	XhtmlTransitionalDoctype;
+	XhtmlStrictDoctype;
+	XhtmlFramesetDoctype;
+	Xhtml1_1Doctype;
+	BasicDoctype;
+	MobileDoctype;
+	CustomDoctype(value : String);
 }
-
-enum DomValue {
-	VExpression(expr : String);
-	VString(text : String);
-}
-
-enum DomAttributeValue {
-	VAExpression(expr : String);
-	VAString(text : String);
-	VABool(value : Bool);
-}
-*/
