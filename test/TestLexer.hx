@@ -8,11 +8,11 @@ class TestLexer {
 
 	public function testBasic() {
 		var tests = [
-			{ test : "text", expected : [VString("text")] },
-			{ test : "$name", expected : [VExpression("name")] },
-			{ test : "the name is $name", expected : [VString("the name is "), VExpression("name")] },
-			{ test : "a$b c", expected : [VString("a"), VExpression("b"), VString(" c")] },
-			{ test : "a${b}c", expected : [VString("a"), VExpression("b"), VString("c")] },
+			{ test : "text", expected : [TString("text", null)] },
+			{ test : "$name", expected : [TExpression("name", null)] },
+			{ test : "the name is $name", expected : [TString("the name is ", null), TExpression("name", null)] },
+			{ test : "a$b c", expected : [TString("a", null), TExpression("b", null), TString(" c", null)] },
+			{ test : "a${b}c", expected : [TString("a", null), TExpression("b", null), TString("c", null)] },
 		];
 
 		for(test in tests)
@@ -28,6 +28,20 @@ class TestLexer {
 			trace(t);
 			tokens.push(t);
 		} catch (e:Dynamic) { }
-		Assert.same(expected, tokens, 'expected $test to parse to $expected but it is $tokens', pos);
+		Assert.equals(expected.length, tokens.length, "number of expressions do not match for $expected and $tests");
+		for(i in 0...expected.length) {
+			assertSameValueToken(expected[i], tokens[i]);
+		}
+	}
+
+	function assertSameValueToken(a, b) {
+		switch [a, b] {
+			case [TString(sa, _), TString(sb, _)]:
+				Assert.equals(sa, sb);
+			case [TExpression(sa, _), TExpression(sb, _)]:
+				Assert.equals(sa, sb);
+			case [_, _]:
+				Assert.fail('$a doesn\'t match $b');
+		}
 	}
 }

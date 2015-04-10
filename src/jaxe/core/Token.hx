@@ -1,8 +1,8 @@
 package jaxe.core;
 
 enum ValueToken {
-	VExpression(expr : String);
-	VString(text : String);
+	TExpression(expr : String, pos : hxparse.Position);
+	TString(text : String, pos : hxparse.Position);
 }
 
 /*
