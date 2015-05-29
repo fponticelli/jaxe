@@ -1,11 +1,11 @@
 //- index.jx
--extends ./layout.jx
+$extends ./layout.jx
 
--block scripts
+$block scripts
   script(src='/jquery.js')
   script(src='/pets.js')
 
--block content
+$block content
   h1 $title
-  -for(pet in pets)
+  $for(pet in pets)
     include pet //- TODO needs template for pet

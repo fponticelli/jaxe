@@ -1,2 +1,2 @@
-div[escaped=<code>]
-div[unescaped!=<code>]
+div[escaped=$code]
+div[unescaped=!code]

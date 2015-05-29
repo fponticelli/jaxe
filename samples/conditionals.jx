@@ -1,20 +1,20 @@
--
+$
   var user = { description: 'foo bar baz' },
       authorized = false;
 #user
-  -if user.description
+  $if(null != user.description)
     h2 Description
     p.description $user.description
-  -else if authorized
+  $else if(authorized)
     h2 Description
     p.description.
       User has no description,
       why not add one...
-  -else
+  $else
     h1 Description
     p.description User has no description
 
--unless user.isAnonymous
+$unless user.isAnonymous
   p You're logged in as $user.name
--if(!user.isAnonymous)
+$if(!user.isAnonymous)
   p You're logged in as $user.name

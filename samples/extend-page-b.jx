@@ -1,9 +1,9 @@
--extends ./sub-layout.jade
+$extends ./sub-layout.jade
 
--block content
+$block content
   .sidebar
-    -block sidebar
+    $block sidebar
       p nothing
   .primary
-    -block primary
+    $block primary
       p nothing

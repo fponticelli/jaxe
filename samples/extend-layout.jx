@@ -2,12 +2,12 @@
 doctype html
 html
   head
-    -block title
+    $block title
       title $title
-    -block scripts
+    $block scripts
       script(src='/jquery.js')
   body
-    -block content
-    -block foot
+    $block content
+    $block foot
       #footer
         p some footer content

@@ -1,4 +1,4 @@
--doctype html
+doctype html
 html[lang=en]
   head
     title $pageTitle
@@ -7,11 +7,11 @@ html[lang=en]
          bar(1 + 5)
       }
   body
-    h1 Jaxe - node template engine
+    h1 Jaxe - Haxe template engine
     #container.col
-      -if(youAreUsingJaxe)
+      $if(youAreUsingJaxe)
         p You are amazing
-      -else
+      $else
         p Get on it!
       p.
         Jaxe is a terse and simple
@@ -20,10 +20,10 @@ html[lang=en]
         and powerful features.
 
     ul
-    -for(i in 0...10)
+    $for(i in 0...10)
       li count $i
 
-    - var i = 0;
+    $ var i = 0;
     ul
-    -while(i++ < 10)
+    $while(i++ < 10)
       li count $i

@@ -1,11 +1,11 @@
 doctype html
 html
-  -include ./includes/head.jx
+  $include ./includes/head.jx
   style
-    -include style.css //- include as plain text
+    $include style.css //- include as plain text
   body
     h1 My Site
     p Welcome to my super lame site.
-    -include ./includes/foot.jx
+    $include ./includes/foot.jx
     script
-      -include script.js //- include as plain text
+      $include script.js //- include as plain text

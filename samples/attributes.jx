@@ -1,2 +1,2 @@
-- var authenticated = true;
+$ var authenticated = true;
 body[class=${authenticated ? 'authed' : 'anon'}]
