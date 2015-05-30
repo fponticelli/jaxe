@@ -21,6 +21,10 @@ class Tokens {
 				{ type : "doctype", value : "mobile" };
 			case TDoctype(CustomDoctype(value)):
 				{ type : "doctype", value : "custom", attr : value };
+			case TOutdent:
+				{ type : "outdent" }
+			case TEos:
+				{ type : "eos" }
 		};
 	}
 
@@ -36,6 +40,8 @@ class Tokens {
 			case ["doctype", "mobile"]: TDoctype(MobileDoctype);
 			case ["doctype", "custom"]: TDoctype(CustomDoctype(token.attr));
 			case ["doctype", unknown]: throw new LexerParseError('unknown doctype $unknown');
+			case ["outdent", _]: TOutdent;
+			case ["eos", _]: TEos;
 			case [type, _]: throw new LexerParseError('unknown object type $type');
 		};
 	}

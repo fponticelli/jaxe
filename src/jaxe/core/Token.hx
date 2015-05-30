@@ -2,6 +2,8 @@ package jaxe.core;
 
 enum Token {
 	TDoctype(type : Doctype);
+	TEos;
+	TOutdent;
 }
 
 enum Doctype {
