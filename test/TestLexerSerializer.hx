@@ -1,8 +1,8 @@
 import utest.Assert;
 
 using thx.Arrays;
-import jaxe.core.Lexer;
 import jaxe.core.Token;
+import jaxe.core.Tokens;
 
 class TestLexerSerializer {
 	public function new() {}
