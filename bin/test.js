@@ -230,12 +230,50 @@ StringTools.trim = function(s) {
 StringTools.replace = function(s,sub,by) {
 	return s.split(sub).join(by);
 };
-var TestAll = function() { };
+var TestAll = function() {
+};
 TestAll.__name__ = ["TestAll"];
 TestAll.main = function() {
 	var runner = new utest_Runner();
+	runner.addCase(new TestAll());
 	utest_ui_Report.create(runner);
 	runner.run();
+};
+TestAll.prototype = {
+	testTokens: function() {
+		var stream = new tokens_Tokens(["a","b","c","d"]);
+		utest_Assert.raises(function() {
+			stream.lookahead(9);
+		},tokens_OutOfBoundaries,null,null,{ fileName : "TestAll.hx", lineNumber : 21, className : "TestAll", methodName : "testTokens"});
+		utest_Assert.equals("a",stream.peek(),null,{ fileName : "TestAll.hx", lineNumber : 23, className : "TestAll", methodName : "testTokens"});
+		utest_Assert.equals("a",stream.lookahead(0),null,{ fileName : "TestAll.hx", lineNumber : 24, className : "TestAll", methodName : "testTokens"});
+		utest_Assert.equals("b",stream.lookahead(1),null,{ fileName : "TestAll.hx", lineNumber : 25, className : "TestAll", methodName : "testTokens"});
+		utest_Assert.equals("a",stream.advance(),null,{ fileName : "TestAll.hx", lineNumber : 27, className : "TestAll", methodName : "testTokens"});
+		utest_Assert.equals("b",stream.peek(),null,{ fileName : "TestAll.hx", lineNumber : 28, className : "TestAll", methodName : "testTokens"});
+		utest_Assert.equals("b",stream.lookahead(0),null,{ fileName : "TestAll.hx", lineNumber : 29, className : "TestAll", methodName : "testTokens"});
+		utest_Assert.equals("c",stream.lookahead(1),null,{ fileName : "TestAll.hx", lineNumber : 30, className : "TestAll", methodName : "testTokens"});
+		stream.defer("z");
+		utest_Assert.equals("z",stream.peek(),null,{ fileName : "TestAll.hx", lineNumber : 33, className : "TestAll", methodName : "testTokens"});
+		utest_Assert.equals("z",stream.lookahead(0),null,{ fileName : "TestAll.hx", lineNumber : 34, className : "TestAll", methodName : "testTokens"});
+		utest_Assert.equals("b",stream.lookahead(1),null,{ fileName : "TestAll.hx", lineNumber : 35, className : "TestAll", methodName : "testTokens"});
+		utest_Assert.equals("z",stream.advance(),null,{ fileName : "TestAll.hx", lineNumber : 36, className : "TestAll", methodName : "testTokens"});
+		utest_Assert.equals("b",stream.advance(),null,{ fileName : "TestAll.hx", lineNumber : 37, className : "TestAll", methodName : "testTokens"});
+		utest_Assert.equals("c",stream.advance(),null,{ fileName : "TestAll.hx", lineNumber : 38, className : "TestAll", methodName : "testTokens"});
+		utest_Assert.equals("d",stream.advance(),null,{ fileName : "TestAll.hx", lineNumber : 39, className : "TestAll", methodName : "testTokens"});
+		utest_Assert.raises(function() {
+			stream.peek();
+		},tokens_OutOfBoundaries,null,null,{ fileName : "TestAll.hx", lineNumber : 41, className : "TestAll", methodName : "testTokens"});
+		utest_Assert.raises(function() {
+			stream.lookahead(0);
+		},tokens_OutOfBoundaries,null,null,{ fileName : "TestAll.hx", lineNumber : 42, className : "TestAll", methodName : "testTokens"});
+		utest_Assert.raises(function() {
+			stream.lookahead(1);
+		},tokens_OutOfBoundaries,null,null,{ fileName : "TestAll.hx", lineNumber : 43, className : "TestAll", methodName : "testTokens"});
+		utest_Assert.raises(function() {
+			stream.advance();
+		},tokens_OutOfBoundaries,null,null,{ fileName : "TestAll.hx", lineNumber : 44, className : "TestAll", methodName : "testTokens"});
+	}
+	,__class__: TestAll
 };
 var ValueType = { __ename__ : ["ValueType"], __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] };
 ValueType.TNull = ["TNull",0];
@@ -958,6 +996,79 @@ js_html_compat_Uint8Array._subarray = function(start,end) {
 	var a = js_html_compat_Uint8Array._new(t.slice(start,end));
 	a.byteOffset = start;
 	return a;
+};
+var thx_Error = function(message,stack,pos) {
+	Error.call(this,message);
+	this.message = message;
+	if(null == stack) {
+		try {
+			stack = haxe_CallStack.exceptionStack();
+		} catch( e ) {
+			haxe_CallStack.lastException = e;
+			if (e instanceof js__$Boot_HaxeError) e = e.val;
+			stack = [];
+		}
+		if(stack.length == 0) try {
+			stack = haxe_CallStack.callStack();
+		} catch( e1 ) {
+			haxe_CallStack.lastException = e1;
+			if (e1 instanceof js__$Boot_HaxeError) e1 = e1.val;
+			stack = [];
+		}
+	}
+	this.stackItems = stack;
+	this.pos = pos;
+};
+thx_Error.__name__ = ["thx","Error"];
+thx_Error.fromDynamic = function(err,pos) {
+	if(js_Boot.__instanceof(err,thx_Error)) return err;
+	return new thx_error_ErrorWrapper("" + Std.string(err),err,null,pos);
+};
+thx_Error.__super__ = Error;
+thx_Error.prototype = $extend(Error.prototype,{
+	pos: null
+	,stackItems: null
+	,toString: function() {
+		return this.message + "\nfrom: " + this.pos.className + "." + this.pos.methodName + "() at " + this.pos.lineNumber + "\n\n" + haxe_CallStack.toString(this.stackItems);
+	}
+	,__class__: thx_Error
+});
+var thx_error_ErrorWrapper = function(message,innerError,stack,pos) {
+	thx_Error.call(this,message,stack,pos);
+	this.innerError = innerError;
+};
+thx_error_ErrorWrapper.__name__ = ["thx","error","ErrorWrapper"];
+thx_error_ErrorWrapper.__super__ = thx_Error;
+thx_error_ErrorWrapper.prototype = $extend(thx_Error.prototype,{
+	innerError: null
+	,__class__: thx_error_ErrorWrapper
+});
+var tokens_OutOfBoundaries = function(message,stack,pos) {
+	thx_Error.call(this,message,stack,pos);
+};
+tokens_OutOfBoundaries.__name__ = ["tokens","OutOfBoundaries"];
+tokens_OutOfBoundaries.__super__ = thx_Error;
+tokens_OutOfBoundaries.prototype = $extend(thx_Error.prototype,{
+	__class__: tokens_OutOfBoundaries
+});
+var tokens_Tokens = function(tokens1) {
+	this.tokens = tokens1;
+};
+tokens_Tokens.__name__ = ["tokens","Tokens"];
+tokens_Tokens.prototype = {
+	tokens: null
+	,lookahead: function(index) {
+		return null;
+	}
+	,peek: function() {
+		return null;
+	}
+	,advance: function() {
+		return null;
+	}
+	,defer: function(token) {
+	}
+	,__class__: tokens_Tokens
 };
 var utest_Assert = function() { };
 utest_Assert.__name__ = ["utest","Assert"];
