@@ -1043,8 +1043,8 @@ thx_error_ErrorWrapper.prototype = $extend(thx_Error.prototype,{
 	innerError: null
 	,__class__: thx_error_ErrorWrapper
 });
-var tokens_OutOfBoundaries = function(message,stack,pos) {
-	thx_Error.call(this,message,stack,pos);
+var tokens_OutOfBoundaries = function() {
+	thx_Error.call(this,"Cannot read past the end of a token stream",null,{ fileName : "OutOfBoundaries.hx", lineNumber : 5, className : "tokens.OutOfBoundaries", methodName : "new"});
 };
 tokens_OutOfBoundaries.__name__ = ["tokens","OutOfBoundaries"];
 tokens_OutOfBoundaries.__super__ = thx_Error;
@@ -1058,12 +1058,15 @@ tokens_Tokens.__name__ = ["tokens","Tokens"];
 tokens_Tokens.prototype = {
 	tokens: null
 	,lookahead: function(index) {
+		if(index >= this.tokens.length) throw new tokens_OutOfBoundaries();
 		return null;
 	}
 	,peek: function() {
+		if(0 == this.tokens.length) throw new tokens_OutOfBoundaries();
 		return null;
 	}
 	,advance: function() {
+		if(0 == this.tokens.length) throw new tokens_OutOfBoundaries();
 		return null;
 	}
 	,defer: function(token) {

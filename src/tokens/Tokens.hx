@@ -7,14 +7,17 @@ class Tokens<T> {
   }
 
   public function lookahead(index : Int) : T {
+    if(index >= tokens.length) throw new OutOfBoundaries();
     return null;
   }
 
   public function peek() : T {
+    if(0 == tokens.length) throw new OutOfBoundaries();
     return null;
   }
 
   public function advance() : T {
+    if(0 == tokens.length) throw new OutOfBoundaries();
     return null;
   }
 
