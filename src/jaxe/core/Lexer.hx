@@ -22,7 +22,7 @@ class Lexer {
 		lineNumber = 1;
 	}
 
-	function getTokens() {
+	public function getTokens() {
 		while(!ended)
 			advance();
 		return tokens;
