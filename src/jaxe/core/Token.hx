@@ -10,6 +10,8 @@ enum DomToken {
 	TElement(name : String);
 	TClass(name : String);
 	TId(name : String);
+	TIndent(levels : Int);
+	TEof;
 }
 
 enum Doctype {

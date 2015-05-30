@@ -10,6 +10,6 @@ class TestParser {
 	public function testBasic() {
 		var data = byte.ByteData.ofString("div#main");
 		var parser = new Parser(data, "test");
-
+		parser.parse();
 	}
 }
