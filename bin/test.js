@@ -1059,17 +1059,18 @@ tokens_Tokens.prototype = {
 	tokens: null
 	,lookahead: function(index) {
 		if(index >= this.tokens.length) throw new tokens_OutOfBoundaries();
-		return null;
+		return this.tokens[index];
 	}
 	,peek: function() {
 		if(0 == this.tokens.length) throw new tokens_OutOfBoundaries();
-		return null;
+		return this.tokens[0];
 	}
 	,advance: function() {
 		if(0 == this.tokens.length) throw new tokens_OutOfBoundaries();
-		return null;
+		return this.tokens.shift();
 	}
 	,defer: function(token) {
+		this.tokens.unshift(token);
 	}
 	,__class__: tokens_Tokens
 };

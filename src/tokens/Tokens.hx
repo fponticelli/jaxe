@@ -8,20 +8,20 @@ class Tokens<T> {
 
   public function lookahead(index : Int) : T {
     if(index >= tokens.length) throw new OutOfBoundaries();
-    return null;
+    return tokens[index];
   }
 
   public function peek() : T {
     if(0 == tokens.length) throw new OutOfBoundaries();
-    return null;
+    return tokens[0];
   }
 
   public function advance() : T {
     if(0 == tokens.length) throw new OutOfBoundaries();
-    return null;
+    return tokens.shift();
   }
 
   public function defer(token : T) : Void {
-
+    tokens.unshift(token);
   }
 }
