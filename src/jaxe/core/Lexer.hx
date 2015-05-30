@@ -3,6 +3,17 @@ package jaxe.core;
 import jaxe.core.Token;
 
 class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder {
+	public static var doctype = @:rule [
+		'doctype html' => HtmlDoctype,
+		'doctype xml' => XmlDoctype,
+		'doctype transitional' => XhtmlTransitionalDoctype,
+		'doctype strict' => XhtmlStrictDoctype,
+		'doctype frameset' => XhtmlFramesetDoctype,
+		'doctype 1\\.1' => Xhtml11Doctype,
+		'doctype basic' => BasicDoctype,
+		'doctype mobile' => MobileDoctype,
+		'doctype [^\n]+' => CustomDoctype(lexer.current.substring('doctype '.length))
+	];
 
 /*
 	public static var value = @:rule [
@@ -13,17 +24,6 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder {
 	];
 
 	public static var node = @:rule [
-		// doctype
-		'doctype html' => TDoctype(HtmlDoctype),
-		'doctype xml' => TDoctype(XmlDoctype),
-		'doctype transitional' => TDoctype(XhtmlTransitionalDoctype),
-		'doctype strict' => TDoctype(XhtmlStrictDoctype),
-		'doctype frameset' => TDoctype(XhtmlFramesetDoctype),
-		'doctype 1\\.1' => TDoctype(Xhtml1_1Doctype),
-		'doctype basic' => TDoctype(BasicDoctype),
-		'doctype mobile' => TDoctype(MobileDoctype),
-		'doctype ([^\n]+)' => TDoctype(CustomDoctype(lexer.current)),
-
 		// dom
 		'[^.#\\[ ]+' => TElement(lexer.current),
 		'\\.[^.#\\[ ]+' => TClass(lexer.current),

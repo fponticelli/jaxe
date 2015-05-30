@@ -1,5 +1,6 @@
 package jaxe.core;
 
+/*
 enum ValueToken {
 	TExpression(expr : String, pos : hxparse.Position);
 	TString(text : String, pos : hxparse.Position);
@@ -13,6 +14,7 @@ enum DomToken {
 	TIndent(levels : Int);
 	TEof;
 }
+*/
 
 enum Doctype {
 	HtmlDoctype;
@@ -20,7 +22,7 @@ enum Doctype {
 	XhtmlTransitionalDoctype;
 	XhtmlStrictDoctype;
 	XhtmlFramesetDoctype;
-	Xhtml1_1Doctype;
+	Xhtml11Doctype;
 	BasicDoctype;
 	MobileDoctype;
 	CustomDoctype(value : String);
