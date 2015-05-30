@@ -20,6 +20,8 @@ class TestAll {
     var stream = new Tokens(['a', 'b', 'c', 'd']);
     Assert.raises(function() stream.lookahead(9), OutOfBoundaries);
 
+    Assert.isTrue(stream.canAdvance());
+
     Assert.equals('a', stream.peek());
     Assert.equals('a', stream.lookahead(0));
     Assert.equals('b', stream.lookahead(1));
@@ -38,6 +40,7 @@ class TestAll {
     Assert.equals('c', stream.advance());
     Assert.equals('d', stream.advance());
 
+    Assert.isFalse(stream.canAdvance());
     Assert.raises(function() stream.peek(), OutOfBoundaries);
     Assert.raises(function() stream.lookahead(0), OutOfBoundaries);
     Assert.raises(function() stream.lookahead(1), OutOfBoundaries);

@@ -4,5 +4,6 @@
 -cp src
 -cp test
 -main TestAll
+-dce full
 
 -cmd node bin/test.js

@@ -1,10 +1,22 @@
 package tokens;
 
+using thx.Arrays;
+
 class Tokens<T> {
   var tokens : Array<T>;
-  public function new(tokens : Array<T>) {
+  public function new(tokens : Array<T>)
     this.tokens = tokens;
+
+  public function advance() : T {
+    if(tokens.isEmpty()) throw new OutOfBoundaries();
+    return tokens.shift();
   }
+
+  public function canAdvance()
+    return !tokens.isEmpty();
+
+  public function defer(token : T) : Void
+    tokens.unshift(token);
 
   public function lookahead(index : Int) : T {
     if(index >= tokens.length) throw new OutOfBoundaries();
@@ -12,16 +24,7 @@ class Tokens<T> {
   }
 
   public function peek() : T {
-    if(0 == tokens.length) throw new OutOfBoundaries();
-    return tokens[0];
-  }
-
-  public function advance() : T {
-    if(0 == tokens.length) throw new OutOfBoundaries();
-    return tokens.shift();
-  }
-
-  public function defer(token : T) : Void {
-    tokens.unshift(token);
+    if(tokens.isEmpty()) throw new OutOfBoundaries();
+    return tokens.first();
   }
 }
