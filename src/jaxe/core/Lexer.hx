@@ -55,8 +55,8 @@ class Lexer {
 	function eos() {
 		if(input.length > 0) return false;
 		for(i in 0...indentStack.length)
-			tokens.push(TOutdent);
-		tokens.push(TEos);
+			tok(TOutdent);
+		tok(TEos);
 		ended = true;
 		return true;
 	}
@@ -68,11 +68,20 @@ class Lexer {
 	function nextLine()
 		lineNumber++;
 
-	function scan(reg : EReg, f : EReg -> Null<Token>) : Bool {
+	function tok(token : TToken)
+		tokens.push({
+			token : token,
+			pos : {
+				line : lineNumber,
+				source : source
+			}
+		});
+
+	function scan(reg : EReg, f : EReg -> Null<TToken>) : Bool {
 		if(!reg.match(input)) return false;
 		var v = f(reg);
 		if(null != v)
-			tokens.push(v);
+			tok(v);
 		input = reg.matchedRight();
 		return true;
 	}

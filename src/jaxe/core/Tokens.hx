@@ -1,35 +1,41 @@
 package jaxe.core;
 
+import jaxe.core.Token;
+
 class Tokens {
 	public static function toObject(token : Token) : TokenObject {
-		return switch token {
+		return switch token.token {
 			case TDoctype(HtmlDoctype):
-				{ type : "doctype", value : "html" };
+				{ type : "doctype", value : "html", pos : token.pos };
 			case TDoctype(XmlDoctype):
-				{ type : "doctype", value : "xml" };
+				{ type : "doctype", value : "xml", pos : token.pos };
 			case TDoctype(XhtmlTransitionalDoctype):
-				{ type : "doctype", value : "transitional" };
+				{ type : "doctype", value : "transitional", pos : token.pos };
 			case TDoctype(XhtmlStrictDoctype):
-				{ type : "doctype", value : "strict" };
+				{ type : "doctype", value : "strict", pos : token.pos };
 			case TDoctype(XhtmlFramesetDoctype):
-				{ type : "doctype", value : "frameset" };
+				{ type : "doctype", value : "frameset", pos : token.pos };
 			case TDoctype(Xhtml11Doctype):
-				{ type : "doctype", value : "1.1" };
+				{ type : "doctype", value : "1.1", pos : token.pos };
 			case TDoctype(BasicDoctype):
-				{ type : "doctype", value : "basic" };
+				{ type : "doctype", value : "basic", pos : token.pos };
 			case TDoctype(MobileDoctype):
-				{ type : "doctype", value : "mobile" };
+				{ type : "doctype", value : "mobile", pos : token.pos };
 			case TDoctype(CustomDoctype(value)):
-				{ type : "doctype", value : "custom", attr : value };
+				{ type : "doctype", value : "custom", attr : value, pos : token.pos };
 			case TOutdent:
-				{ type : "outdent" }
+				{ type : "outdent", pos : token.pos }
 			case TEos:
-				{ type : "eos" }
+				{ type : "eos", pos : token.pos }
+			case TCommentInline(content):
+				{ type : "comment-inline", value : "content", pos : token.pos }
+			case TComment:
+				{ type : "comment", pos : token.pos }
 		};
 	}
 
 	public static function fromObject(token : TokenObject) : Token {
-		return switch [token.type, token.value] {
+		var t = switch [token.type, token.value] {
 			case ["doctype", "html"]: TDoctype(HtmlDoctype);
 			case ["doctype", "xml"]: TDoctype(XmlDoctype);
 			case ["doctype", "transitional"]: TDoctype(XhtmlTransitionalDoctype);
@@ -42,7 +48,13 @@ class Tokens {
 			case ["doctype", unknown]: throw new LexerParseError('unknown doctype $unknown');
 			case ["outdent", _]: TOutdent;
 			case ["eos", _]: TEos;
+			case ["comment-inline", content]: TCommentInline(content);
+			case ["comment", _]: TComment;
 			case [type, _]: throw new LexerParseError('unknown object type $type');
+		};
+		return {
+			token : t,
+			pos : token.pos
 		};
 	}
 }
@@ -50,5 +62,9 @@ class Tokens {
 typedef TokenObject = {
 	type : String,
 	?value : String,
-	?attr : Dynamic
+	?attr : Dynamic,
+	pos : {
+		line : Int,
+		source : String
+	}
 }

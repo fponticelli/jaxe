@@ -24,8 +24,9 @@ class TestLexerSerializer {
     TEos
   ].map(assertRoundTrip);
 
-  static function assertRoundTrip(token : Token) {
-    var ob = Tokens.toObject(token),
+  static function assertRoundTrip(ttoken : TToken) {
+    var token = { token : ttoken, pos : {line : 1, source : "test"} },
+        ob = Tokens.toObject(token),
         ntoken = Tokens.fromObject(ob);
     Assert.same(token, ntoken);
   }

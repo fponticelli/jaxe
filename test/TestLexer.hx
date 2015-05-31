@@ -17,7 +17,9 @@ class TestLexer {
 					tokens = lexer.getTokens(),
 					obs : Array<TokenObject> = yaml.Yaml.parse(p.right.content, yaml.Parser.options().useObjects()),
 					expected = obs.pluck(Tokens.fromObject(_));
-			Assert.same(expected, tokens);
+			tokens.zip(expected)
+				.pluck(Assert.same(_.right.token, _.left.token));
+			Assert.equals(expected.length, tokens.length);
 		});
 	}
 

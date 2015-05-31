@@ -1,9 +1,19 @@
 package jaxe.core;
 
-enum Token {
+typedef Token = {
+	token : TToken,
+	pos : {
+		line : Int,
+		source : String
+	}
+}
+
+enum TToken {
 	TDoctype(type : Doctype);
 	TEos;
 	TOutdent;
+	TCommentInline(value : String);
+	TComment;
 }
 
 enum Doctype {
