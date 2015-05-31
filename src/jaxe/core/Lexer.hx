@@ -39,6 +39,11 @@ class Lexer {
 			return pipeless ? TLiteral(reg.matched(1)) : null;
 		});
 
+	function className()
+		return scan(~/^\.([\w-]+)/, function(reg) {
+			return TClassName(reg.matched(1));
+		});
+
 	function comment()
 		return scan(~/^\/\/(-)?([^\n]*)/, function(reg) {
 			if(reg.matched(1) == "-")
@@ -82,6 +87,11 @@ class Lexer {
 	function fail() : Bool
 		return throw new LexerError('unexpected text: ${input.split("\n").shift()}');
 
+	function id()
+		return scan(~/^#([\w-]+)/, function(reg) {
+			return TId(reg.matched(1));
+		});
+
 	function tag()
 		return scan(~/^(\w(?:[-:\w]*\w)?)(\/?)/, function(reg) {
 			var name = reg.matched(1),
@@ -117,6 +127,8 @@ class Lexer {
 			|| doctype()
 			|| tag()
 			|| filter()
+			|| id()
+			|| className()
 			|| comment()
 			|| fail();
 }

@@ -5,6 +5,8 @@ import jaxe.core.Token;
 class Tokens {
 	public static function toObject(token : Token) : TokenObject {
 		return switch token.token {
+			case TClassName(name):
+				{ type : "class", value : name, pos : token.pos }
 			case TComment:
 				{ type : "comment", pos : token.pos }
 			case TCommentInline(content):
@@ -31,6 +33,8 @@ class Tokens {
 				{ type : "eos", pos : token.pos }
 			case TFilter(name):
 				{ type : "filter", value : name, pos : token.pos }
+			case TId(name):
+				{ type : "id", value : name, pos : token.pos }
 			case TLiteral(text):
 				{ type : "literal", value : text, pos : token.pos }
 			case TOutdent:
@@ -42,6 +46,7 @@ class Tokens {
 
 	public static function fromObject(token : TokenObject) : Token {
 		var t = switch [token.type, token.value] {
+			case ["class", name]: TClassName(name);
 			case ["comment", _]: TComment;
 			case ["comment-inline", content]: TCommentInline(content);
 			case ["doctype", "html"]: TDoctype(HtmlDoctype);
@@ -56,6 +61,7 @@ class Tokens {
 			case ["doctype", unknown]: throw new LexerParseError('unknown doctype $unknown');
 			case ["eos", _]: TEos;
 			case ["filter", name]: TFilter(name);
+			case ["id", name]: TId(name);
 			case ["literal", text]: TLiteral(text);
 			case ["outdent", _]: TOutdent;
 			case ["tag", name]: TTag(name, token.attr.selfClosing);
