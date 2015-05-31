@@ -7,6 +7,11 @@ import jaxe.core.Tokens;
 class TestLexerSerializer {
 	public function new() {}
 
+	public function testComments() [
+		TComment,
+		TCommentInline("my comment"),
+	].map(assertRoundTrip);
+
   public function testDoctypes() [
     TDoctype(HtmlDoctype),
     TDoctype(XmlDoctype),
