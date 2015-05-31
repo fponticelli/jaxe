@@ -37,6 +37,14 @@ class Lexer {
 			return null;
 		});
 
+	function comment()
+		return scan(~/^\/\/(-)?([^\n]*)/, function(reg) {
+			if(reg.matched(1) == "-")
+				return TCommentInline(reg.matched(2));
+			else
+				return TComment;
+		});
+
 	function doctype()
 		return scan(~/^doctype +([^\n]+)?/, function(reg) {
 			return TDoctype(switch reg.matched(1) {
