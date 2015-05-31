@@ -32,7 +32,10 @@ class Lexer {
 	}
 
 	function blank()
-		return false;
+		return scan(~/^\n *$/, function(reg) {
+			nextLine();
+			return null;
+		});
 
 	function doctype()
 		return scan(~/^doctype +([^\n]+)?/, function(reg) {
@@ -60,6 +63,10 @@ class Lexer {
 
 	function fail() : Bool
 		return throw new LexerError('unexpected text: ${input.split("\n").shift()}');
+
+	// utility functions
+	function nextLine()
+		lineNumber++;
 
 	function scan(reg : EReg, f : EReg -> Null<Token>) : Bool {
 		if(!reg.match(input)) return false;

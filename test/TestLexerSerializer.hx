@@ -7,20 +7,22 @@ import jaxe.core.Tokens;
 class TestLexerSerializer {
 	public function new() {}
 
-  public function testRoundTrip() {
-    // doctypes
-    [
-      TDoctype(HtmlDoctype),
-      TDoctype(XmlDoctype),
-      TDoctype(XhtmlTransitionalDoctype),
-      TDoctype(XhtmlStrictDoctype),
-      TDoctype(XhtmlFramesetDoctype),
-      TDoctype(Xhtml11Doctype),
-      TDoctype(BasicDoctype),
-      TDoctype(MobileDoctype),
-      TDoctype(CustomDoctype("html PUBLIC \"-//W3C//DTD XHTML Basic 1.1//EN\"")),
-    ].map(assertRoundTrip);
-  }
+  public function testDoctypes() [
+    TDoctype(HtmlDoctype),
+    TDoctype(XmlDoctype),
+    TDoctype(XhtmlTransitionalDoctype),
+    TDoctype(XhtmlStrictDoctype),
+    TDoctype(XhtmlFramesetDoctype),
+    TDoctype(Xhtml11Doctype),
+    TDoctype(BasicDoctype),
+    TDoctype(MobileDoctype),
+    TDoctype(CustomDoctype("html PUBLIC \"-//W3C//DTD XHTML Basic 1.1//EN\"")),
+  ].map(assertRoundTrip);
+
+  public function testUtils() [
+    TOutdent,
+    TEos
+  ].map(assertRoundTrip);
 
   static function assertRoundTrip(token : Token) {
     var ob = Tokens.toObject(token),

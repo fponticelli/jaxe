@@ -1,6 +1,7 @@
 -lib utest
 -lib thx.core
 -lib hxnodejs
+-lib yaml
 -cp src
 -cp test
 -js bin/test.js

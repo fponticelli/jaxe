@@ -4,6 +4,7 @@ using thx.Arrays;
 using thx.Strings;
 import jaxe.core.Lexer;
 import jaxe.core.Token;
+import jaxe.core.Tokens;
 
 class TestLexer {
 	public function new() {}
@@ -11,8 +12,12 @@ class TestLexer {
 	public function testCases() {
 		var cases = loadCases("test/cases/lexer");
 		cases.map(function(p) {
+			var c : Array<TokenObject> = yaml.Yaml.parse(p.right.content, yaml.Parser.options().useObjects());
 			var lexer = new Lexer(p.left.content, p.left.name),
-					tokens = lexer.getTokens();
+					tokens = lexer.getTokens(),
+					obs : Array<TokenObject> = yaml.Yaml.parse(p.right.content, yaml.Parser.options().useObjects()),
+					expected = obs.pluck(Tokens.fromObject(_));
+			Assert.same(expected, tokens);
 		});
 	}
 
@@ -28,7 +33,7 @@ class TestLexer {
 
 		var files = js.node.Fs.readdirSync(path),
 				cases = t(files, "jx"),
-				expected = t(files, "json");
+				expected = t(files, "yaml");
 		return cases.zip(expected);
 	}
 }
