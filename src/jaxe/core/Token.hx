@@ -9,11 +9,12 @@ typedef Token = {
 }
 
 enum TToken {
+	TCommentInline(value : String);
+	TComment;
 	TDoctype(type : Doctype);
 	TEos;
 	TOutdent;
-	TCommentInline(value : String);
-	TComment;
+	TLiteral(text : String);
 }
 
 enum Doctype {

@@ -5,6 +5,10 @@ import jaxe.core.Token;
 class Tokens {
 	public static function toObject(token : Token) : TokenObject {
 		return switch token.token {
+			case TComment:
+				{ type : "comment", pos : token.pos }
+			case TCommentInline(content):
+				{ type : "comment-inline", value : content, pos : token.pos }
 			case TDoctype(HtmlDoctype):
 				{ type : "doctype", value : "html", pos : token.pos };
 			case TDoctype(XmlDoctype):
@@ -23,19 +27,19 @@ class Tokens {
 				{ type : "doctype", value : "mobile", pos : token.pos };
 			case TDoctype(CustomDoctype(value)):
 				{ type : "doctype", value : "custom", attr : value, pos : token.pos };
-			case TOutdent:
-				{ type : "outdent", pos : token.pos }
 			case TEos:
 				{ type : "eos", pos : token.pos }
-			case TCommentInline(content):
-				{ type : "comment-inline", value : "content", pos : token.pos }
-			case TComment:
-				{ type : "comment", pos : token.pos }
+			case TLiteral(text):
+				{ type : "literal", value : text, pos : token.pos }
+			case TOutdent:
+				{ type : "outdent", pos : token.pos }
 		};
 	}
 
 	public static function fromObject(token : TokenObject) : Token {
 		var t = switch [token.type, token.value] {
+			case ["comment", _]: TComment;
+			case ["comment-inline", content]: TCommentInline(content);
 			case ["doctype", "html"]: TDoctype(HtmlDoctype);
 			case ["doctype", "xml"]: TDoctype(XmlDoctype);
 			case ["doctype", "transitional"]: TDoctype(XhtmlTransitionalDoctype);
@@ -46,10 +50,9 @@ class Tokens {
 			case ["doctype", "mobile"]: TDoctype(MobileDoctype);
 			case ["doctype", "custom"]: TDoctype(CustomDoctype(token.attr));
 			case ["doctype", unknown]: throw new LexerParseError('unknown doctype $unknown');
-			case ["outdent", _]: TOutdent;
 			case ["eos", _]: TEos;
-			case ["comment-inline", content]: TCommentInline(content);
-			case ["comment", _]: TComment;
+			case ["literal", text]: TLiteral(text);
+			case ["outdent", _]: TOutdent;
 			case [type, _]: throw new LexerParseError('unknown object type $type');
 		};
 		return {
