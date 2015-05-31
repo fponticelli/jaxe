@@ -19,6 +19,7 @@ enum TToken {
 	TOutdent;
 	TLiteral(text : String);
 	TTag(name : String, selfClosing : Bool);
+	TTextHtml(html : String);
 }
 
 enum Doctype {

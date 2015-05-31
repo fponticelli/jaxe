@@ -99,6 +99,11 @@ class Lexer {
 			return TTag(name, selfClosing);
 		});
 
+	function textHtml()
+		return scan(~/^(<.*$)/, function(reg) {
+			return TTextHtml(reg.matched(1));
+		});
+
 	// utility functions
 	function nextLine()
 		lineNumber++;
@@ -124,11 +129,18 @@ class Lexer {
 	function advance()
 		return blank()
 			|| eos()
+			//|| pipelessText()
 			|| doctype()
 			|| tag()
 			|| filter()
 			|| id()
 			|| className()
+			//|| attrs(true)
+			//|| attributesBlock()
+			//|| indent()
+			//|| text()
+			|| textHtml()
 			|| comment()
+			// || textFail()
 			|| fail();
 }
