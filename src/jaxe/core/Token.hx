@@ -13,8 +13,10 @@ enum TToken {
 	TComment;
 	TDoctype(type : Doctype);
 	TEos;
+	TFilter(name : String);
 	TOutdent;
 	TLiteral(text : String);
+	TTag(name : String, selfClosing : Bool);
 }
 
 enum Doctype {

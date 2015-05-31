@@ -73,8 +73,21 @@ class Lexer {
 		return true;
 	}
 
+	function filter()
+		return scan(~/^:([\w\-]+)/, function(reg) {
+			pipeless = true;
+			return TFilter(reg.matched(1));
+		});
+
 	function fail() : Bool
 		return throw new LexerError('unexpected text: ${input.split("\n").shift()}');
+
+	function tag()
+		return scan(~/^(\w(?:[-:\w]*\w)?)(\/?)/, function(reg) {
+			var name = reg.matched(1),
+					selfClosing = reg.matched(2) == "/";
+			return TTag(name, selfClosing);
+		});
 
 	// utility functions
 	function nextLine()
@@ -102,6 +115,8 @@ class Lexer {
 		return blank()
 			|| eos()
 			|| doctype()
+			|| tag()
+			|| filter()
 			|| comment()
 			|| fail();
 }

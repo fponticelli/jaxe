@@ -12,6 +12,12 @@ class TestLexerSerializer {
 		TCommentInline("my comment"),
 	].map(assertRoundTrip);
 
+	public function testContents() [
+		TFilter("fname"),
+		TTag("tagname", true),
+		TTag("tagname", false),
+	].map(assertRoundTrip);
+
   public function testDoctypes() [
     TDoctype(HtmlDoctype),
     TDoctype(XmlDoctype),
