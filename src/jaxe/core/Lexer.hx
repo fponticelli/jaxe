@@ -10,6 +10,7 @@ class Lexer {
 	var ended : Bool;
 	var tokens : Array<Token>;
 	var indentStack : Array<Int>;
+	var pipeless : Bool;
 
 	public function new(content : String, source : String) {
 		input = content;
@@ -23,6 +24,7 @@ class Lexer {
 		lineNumber = 1;
 		tokens = [];
 		indentStack = [];
+		pipeless = false;
 	}
 
 	public function getTokens() {
@@ -32,17 +34,19 @@ class Lexer {
 	}
 
 	function blank()
-		return scan(~/^\n *$/, function(reg) {
+		return scan(~/^\n( *)$/, function(reg) {
 			nextLine();
-			return null;
+			return pipeless ? TLiteral(reg.matched(1)) : null;
 		});
 
 	function comment()
 		return scan(~/^\/\/(-)?([^\n]*)/, function(reg) {
 			if(reg.matched(1) == "-")
 				return TCommentInline(reg.matched(2));
-			else
+			else {
+				pipeless = true;
 				return TComment;
+			}
 		});
 
 	function doctype()
@@ -98,5 +102,6 @@ class Lexer {
 		return blank()
 			|| eos()
 			|| doctype()
+			|| comment()
 			|| fail();
 }
