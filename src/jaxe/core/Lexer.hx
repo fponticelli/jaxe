@@ -17,6 +17,7 @@ class Lexer {
 	var indentStack : Array<Int>;
 	var pipeless : Bool;
 	var interpolated : Bool;
+	var indentRe : EReg;
 
 	public function new(content : String, source : String, ?interpolated : Bool = false) {
 		input = content;
@@ -32,6 +33,7 @@ class Lexer {
 		tokens = [];
 		indentStack = [];
 		pipeless = false;
+		indentRe = null;
 	}
 
 	public function getTokens() {
@@ -109,6 +111,54 @@ class Lexer {
 			return TId(reg.matched(1));
 		});
 
+	function indent() {
+		if(null == indentRe) {
+			var re = ~/^\n(\t*) */,
+					matches = re.match(input);
+			if(matches && (re.matched(1) == null || re.matched(1) == "")) { // TODO check which one is correct
+				re = ~/^\n( *)/;
+				matches = re.match(input);
+			}
+
+			if(matches && re.matched(1) != null && re.matched(1) != "") { // TODO check which one is correct
+				indentRe = re;
+			}
+		}
+
+		if(null == indentRe || !indentRe.match(input)) return false;
+		var indents = indentRe.matched(1).length;
+		nextLine();
+		consume(indents + 1);
+		var c = input.substring(0, 1);
+		if (' ' == c || '\t' == c)
+      throw new LexerError('Invalid indentation, you can use tabs or spaces but not both');
+
+		if('\n' == c) {
+			pipeless = false;
+			tok(TNewline);
+			return true;
+		}
+
+		// outdent
+		if(indentStack.length > 0 && indents < indentStack[0]) {
+			while(indentStack.length > 0 && indentStack[0] > indents) {
+				tok(TOutdent);
+				indentStack.shift();
+			}
+		// indent
+		} else if (indents > 0 && indents != indentStack[0]) {
+			indentStack.unshift(indents);
+			tok(TIndent(indents));
+		// newline
+		} else {
+			tok(TNewline);
+		}
+
+
+		pipeless = false;
+		return true;
+	}
+
 	function tag()
 		return scan(~/^(\w(?:[-:\w]*\w)?)(\/?)/, function(reg) {
 			var name = reg.matched(1),
@@ -158,10 +208,10 @@ class Lexer {
 			|| className()
 			//|| attrs(true)
 			//|| attributesBlock()
-			//|| indent()
+			|| indent()
 			//|| text()
 			|| textHtml()
 			|| comment()
-			// || textFail()
+			//|| textFail()
 			|| fail();
 }
