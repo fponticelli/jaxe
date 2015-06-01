@@ -33,6 +33,8 @@ class TestLexerSerializer {
 
   public function testUtils() [
     TOutdent,
+		TIndent(3),
+		TNewline,
     TEos
   ].map(assertRoundTrip);
 

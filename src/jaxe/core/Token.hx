@@ -17,8 +17,10 @@ enum TToken {
 	TExpression(code : String);
 	TFilter(name : String);
 	TId(name : String);
-	TOutdent;
+	TIndent(indents : Int);
 	TLiteral(text : String);
+	TOutdent;
+	TNewline;
 	TTag(name : String, selfClosing : Bool);
 	TTextHtml(html : String);
 }
