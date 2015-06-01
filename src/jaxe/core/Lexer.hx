@@ -98,7 +98,7 @@ class Lexer {
 		return scan(new EReg('^${(EXPRESSION_SYMBOL + EXPRESSION_OPEN).escape()}', ''), function(reg) {
 			var rest = reg.matchedRight(),
 					close = Utils.match(input, EXPRESSION_OPEN, EXPRESSION_CLOSE);
-			if(close < 0) throw new LexerError('Unable to find closing char $EXPRESSION_CLOSE after ${input.substring(0, 20)} ...');
+			if(close < 0) throw new LexerError('Unable to find closing sequence $EXPRESSION_CLOSE after ${input.substring(0, 20)} ...');
 			var code = rest.substring(0, close);
 			input = rest.substring(close + EXPRESSION_CLOSE.length);
 			return TExpression(code);
