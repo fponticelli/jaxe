@@ -122,6 +122,9 @@ class Lexer {
 		});
 
 	// utility functions
+	function consume(len : Int)
+		input = input.substring(len);
+
 	function nextLine()
 		lineNumber++;
 
