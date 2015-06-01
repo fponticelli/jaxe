@@ -14,6 +14,7 @@ enum TToken {
 	TComment;
 	TDoctype(type : Doctype);
 	TEos;
+	TExpression(code : String);
 	TFilter(name : String);
 	TId(name : String);
 	TOutdent;

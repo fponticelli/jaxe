@@ -16,6 +16,7 @@ class TestLexerSerializer {
 		TFilter("fname"),
 		TTag("tagname", true),
 		TTextHtml("<br/>"),
+		TExpression("var a = 1;"),
 	].map(assertRoundTrip);
 
   public function testDoctypes() [

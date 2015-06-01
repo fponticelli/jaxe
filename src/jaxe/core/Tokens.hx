@@ -31,6 +31,8 @@ class Tokens {
 				{ type : "doctype", value : "custom", attr : { type : value }, pos : token.pos };
 			case TEos:
 				{ type : "eos", pos : token.pos }
+			case TExpression(code):
+				{ type : "expression", value : code, pos : token.pos }
 			case TFilter(name):
 				{ type : "filter", value : name, pos : token.pos }
 			case TId(name):
@@ -62,6 +64,7 @@ class Tokens {
 			case ["doctype", "custom"]: TDoctype(CustomDoctype(token.attr.type));
 			case ["doctype", unknown]: throw new LexerParseError('unknown doctype $unknown');
 			case ["eos", _]: TEos;
+			case ["expression", code]: TExpression(code);
 			case ["filter", name]: TFilter(name);
 			case ["id", name]: TId(name);
 			case ["literal", text]: TLiteral(text);
