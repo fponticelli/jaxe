@@ -1,8 +1,13 @@
 package jaxe.core;
 
 import jaxe.core.Token;
+using thx.ERegs;
 
 class Lexer {
+	static var EXPRESSION_SYMBOL = "$";
+	static var EXPRESSION_OPEN   = "{";
+	static var EXPRESSION_CLOSE  = "}";
+
 	var input : String;
 	var source : String;
 	var lastIndents : Int;
@@ -11,8 +16,9 @@ class Lexer {
 	var tokens : Array<Token>;
 	var indentStack : Array<Int>;
 	var pipeless : Bool;
+	var interpolated : Bool;
 
-	public function new(content : String, source : String) {
+	public function new(content : String, source : String, ?interpolated : Bool = false) {
 		input = content;
 		// normalize BOM
 		input = (~/^\uFEFF/).replace(input, "");
@@ -20,6 +26,7 @@ class Lexer {
 		input = (~/\r\n|\n\r|\r/).replace(input, "\n");
 
 		this.source = source;
+		this.interpolated = interpolated;
 		lastIndents = 0;
 		lineNumber = 1;
 		tokens = [];
@@ -87,6 +94,16 @@ class Lexer {
 	function fail() : Bool
 		return throw new LexerError('unexpected text: ${input.split("\n").shift()}');
 
+	function expression()
+		return scan(new EReg('^${(EXPRESSION_SYMBOL + EXPRESSION_OPEN).escape()}', ''), function(reg) {
+			var rest = reg.matchedRight(),
+					close = Utils.match(input, EXPRESSION_OPEN, EXPRESSION_CLOSE);
+			if(close < 0) throw new LexerError('Unable to find closing char $EXPRESSION_CLOSE after ${input.substring(0, 20)} ...');
+			var code = rest.substring(0, close);
+			input = rest.substring(close + EXPRESSION_CLOSE.length);
+			return TExpression(code);
+		});
+
 	function id()
 		return scan(~/^#([\w-]+)/, function(reg) {
 			return TId(reg.matched(1));
@@ -131,6 +148,7 @@ class Lexer {
 			|| eos()
 			//|| pipelessText()
 			|| doctype()
+			|| expression()
 			|| tag()
 			|| filter()
 			|| id()
