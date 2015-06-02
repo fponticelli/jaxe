@@ -126,8 +126,9 @@ class Lexer {
 
 		var indents = indentRe.matched(1).length;
 		nextLine();
-		consume(indents + 1);
+		consume(indents + 1); // +1 is for the newline
 		var c = input.substring(0, 1);
+
 		if(' ' == c || '\t' == c)
       throw new LexerError('Invalid indentation, you can use tabs or spaces but not both');
 
@@ -151,7 +152,6 @@ class Lexer {
 		} else {
 			tok(TNewline);
 		}
-
 
 		pipeless = false;
 		return true;
@@ -272,17 +272,17 @@ class Lexer {
 		if(null == indentRe) {
 			var re = ~/^\n(\t*) */,
 					matches = re.match(input);
-			if(matches && (re.matched(1) == null || re.matched(1) == "")) { // TODO check which one is correct
+			if(matches && re.matched(1) == "") {
 				re = ~/^\n( *)/;
 				matches = re.match(input);
 			}
 
-			if(matches && re.matched(1) != null && re.matched(1) != "") { // TODO check which one is correct
+			if(matches && re.matched(1) != null && re.matched(1) != "") {
 				indentRe = re;
 			}
 			return null != indentRe;
 		} else {
-			return false;
+			return true;
 		}
 	}
 
