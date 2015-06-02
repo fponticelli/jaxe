@@ -24,6 +24,7 @@ enum TToken {
 	TOutdent;
 	TNewline;
 	TTag(name : String, selfClosing : Bool);
+	TText(text : String);
 	TTextHtml(html : String);
 }
 

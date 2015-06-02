@@ -51,6 +51,8 @@ class Tokens {
 				{ type : "outdent", pos : token.pos }
 			case TTag(name, selfClosing):
 				{ type : "tag", value : name, attr : { selfClosing : selfClosing }, pos : token.pos }
+			case TText(text):
+				{ type : "text", value : text, pos : token.pos }
 			case TTextHtml(html):
 				{ type : "text-html", value : html, pos : token.pos }
 		};
@@ -82,6 +84,7 @@ class Tokens {
 			case ["outdent", _]: TOutdent;
 			case ["newline", _]: TNewline;
 			case ["tag", name]: TTag(name, token.attr.selfClosing);
+			case ["text", text]: TText(text);
 			case ["text-html", html]: TTextHtml(html);
 			case [type, _]: throw new LexerParseError('unknown object type $type');
 		};

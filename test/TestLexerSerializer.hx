@@ -18,6 +18,7 @@ class TestLexerSerializer {
 		TExpressionEnd,
 		TFilter("fname"),
 		TTag("tagname", true),
+		TText("some"),
 		TTextHtml("<br/>"),
 	].map(assertRoundTrip);
 
