@@ -33,6 +33,10 @@ class Tokens {
 				{ type : "eos", pos : token.pos }
 			case TExpression(code):
 				{ type : "expression", value : code, pos : token.pos }
+			case TExpressionStart:
+				{ type : "expression-start", pos : token.pos }
+			case TExpressionEnd:
+				{ type : "expression-end", pos : token.pos }
 			case TFilter(name):
 				{ type : "filter", value : name, pos : token.pos }
 			case TId(name):
@@ -69,6 +73,8 @@ class Tokens {
 			case ["doctype", unknown]: throw new LexerParseError('unknown doctype $unknown');
 			case ["eos", _]: TEos;
 			case ["expression", code]: TExpression(code);
+			case ["expression-start", _]: TExpressionStart;
+			case ["expression-end", _]: TExpressionEnd;
 			case ["filter", name]: TFilter(name);
 			case ["id", name]: TId(name);
 			case ["indent", _]: TIndent(token.attr.indents);

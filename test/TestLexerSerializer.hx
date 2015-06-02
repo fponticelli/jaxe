@@ -13,10 +13,12 @@ class TestLexerSerializer {
 	].map(assertRoundTrip);
 
 	public function testContents() [
+		TExpression("var a = 1;"),
+		TExpressionStart,
+		TExpressionEnd,
 		TFilter("fname"),
 		TTag("tagname", true),
 		TTextHtml("<br/>"),
-		TExpression("var a = 1;"),
 	].map(assertRoundTrip);
 
   public function testDoctypes() [

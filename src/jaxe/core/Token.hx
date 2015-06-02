@@ -15,6 +15,8 @@ enum TToken {
 	TDoctype(type : Doctype);
 	TEos;
 	TExpression(code : String);
+	TExpressionStart;
+	TExpressionEnd;
 	TFilter(name : String);
 	TId(name : String);
 	TIndent(indents : Int);
