@@ -7,6 +7,7 @@ class Lexer {
 	static var EXPRESSION_SYMBOL = "$";
 	static var EXPRESSION_OPEN   = "{";
 	static var EXPRESSION_CLOSE  = "}";
+	static var EXPRESSION_PREFIX = EXPRESSION_SYMBOL + EXPRESSION_OPEN;
 
 	var input : String;
 	var source : String;
@@ -130,7 +131,7 @@ class Lexer {
 		nextLine();
 		consume(indents + 1);
 		var c = input.substring(0, 1);
-		if (' ' == c || '\t' == c)
+		if(' ' == c || '\t' == c)
       throw new LexerError('Invalid indentation, you can use tabs or spaces but not both');
 
 		if('\n' == c) {
@@ -146,7 +147,7 @@ class Lexer {
 				indentStack.shift();
 			}
 		// indent
-		} else if (indents > 0 && indents != indentStack[0]) {
+		} else if(indents > 0 && indents != indentStack[0]) {
 			indentStack.unshift(indents);
 			tok(TIndent(indents));
 		// newline
@@ -172,6 +173,48 @@ class Lexer {
 		});
 
 	// utility functions
+	function addText(value : String, ?prefix : String = "") {
+		if(value + prefix == "") return;
+
+		var indexOfEnd = interpolated ? value.indexOf(EXPRESSION_CLOSE) : -1;
+    var indexOfStart = value.indexOf(EXPRESSION_PREFIX);
+    var indexOfEscaped = value.indexOf('\\$EXPRESSION_PREFIX');
+
+		if(indexOfEscaped >= 0 && (indexOfEnd == - 1 || indexOfEscaped < indexOfEnd) && (indexOfStart == -1 || indexOfEscaped < indexOfStart)) {
+			prefix = prefix + value.substr(0, value.indexOf('\\$EXPRESSION_PREFIX')) + EXPRESSION_PREFIX;
+		  addText(value.substr(value.indexOf('\\$EXPRESSION_PREFIX') + EXPRESSION_PREFIX.length + 1), prefix);
+			return;
+		}
+
+    if(indexOfStart >= 0 && (indexOfEnd == -1 || indexOfStart < indexOfEnd) && (indexOfEscaped == -1 || indexOfStart < indexOfEscaped)) {
+			tok(TText(prefix + value.substr(0, indexOfStart)));
+			tok(TExpressionStart);
+      var child = new Lexer(value.substr(indexOfStart + 2), source, true);
+      var interpolated = child.getTokens();
+			for(token in interpolated) {
+        tokens.push(token);
+        switch token.token {
+					case TEos:
+						throw new LexerError('End of line was reached with no closing $EXPRESSION_CLOSE for interpolation.');
+					case _:
+        }
+      }
+			tok(TExpressionEnd);
+      addText(child.input);
+      return;
+    }
+    if(indexOfEnd >= 0 && (indexOfStart == -1 || indexOfEnd < indexOfStart) && (indexOfEscaped == -1 || indexOfEnd < indexOfEscaped)) {
+      if("" != prefix + value.substr(0, value.indexOf(EXPRESSION_CLOSE))) {
+				tok(TText(prefix + value.substr(0, value.indexOf(EXPRESSION_CLOSE))));
+      }
+      this.ended = true;
+      this.input = value.substr(value.indexOf(EXPRESSION_CLOSE) + EXPRESSION_CLOSE.length) + this.input;
+      return;
+    }
+
+    tok(TText(prefix + value));
+	}
+
 	function consume(len : Int)
 		input = input.substring(len);
 
