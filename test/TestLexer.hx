@@ -18,13 +18,13 @@ class TestLexer {
 			try {
 				obs = yaml.Yaml.parse(p.right.content, yaml.Parser.options().useObjects());
 			} catch(e : Dynamic) {
-				Assert.fail('failed to parse YAML ${p.right.name}');
+				Assert.fail('failed to parse YAML ${p.right.name} $e');
 				return;
 			}
 			try {
 				expected = obs.pluck(try Tokens.fromObject(_) catch(e : LexerParseError) throw 'Unable to tokenize object: ${e.message}');
 			} catch(e : String) {
-				Assert.fail(e);
+				Assert.fail('in ${p.left.name} $e');
 				return;
 			}
 			try {
