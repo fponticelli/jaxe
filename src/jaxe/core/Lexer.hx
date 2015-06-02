@@ -2,6 +2,8 @@ package jaxe.core;
 
 import jaxe.core.Token;
 using thx.ERegs;
+using thx.Strings;
+using thx.Arrays;
 
 class Lexer {
 	static var EXPRESSION_SYMBOL = "$";
@@ -113,20 +115,8 @@ class Lexer {
 		});
 
 	function indent() {
-		if(null == indentRe) {
-			var re = ~/^\n(\t*) */,
-					matches = re.match(input);
-			if(matches && (re.matched(1) == null || re.matched(1) == "")) { // TODO check which one is correct
-				re = ~/^\n( *)/;
-				matches = re.match(input);
-			}
+		if(!ensureIndentRe() || !indentRe.match(input)) return false;
 
-			if(matches && re.matched(1) != null && re.matched(1) != "") { // TODO check which one is correct
-				indentRe = re;
-			}
-		}
-
-		if(null == indentRe || !indentRe.match(input)) return false;
 		var indents = indentRe.matched(1).length;
 		nextLine();
 		consume(indents + 1);
@@ -158,6 +148,41 @@ class Lexer {
 
 		pipeless = false;
 		return true;
+	}
+
+	function pipelessText() {
+		if(!pipeless || !ensureIndentRe() || !indentRe.match(input)) return false;
+
+		var indents = indentRe.matched(1).length;
+
+		if(indents > 0 && (indentStack.length == 0 || indents > indentStack[0])) {
+			tok(TPipelessStart);
+      var indent = indentRe.matched(1).substring(0, 1);
+      var tokens = [];
+      var isMatch;
+      do {
+        // text has `\n` as a prefix
+        var i = input.substr(1).indexOf('\n');
+        if (-1 == i)
+					i = input.length - 1;
+        var str = input.substr(1, i);
+        isMatch = str.substr(0, indent.length) == indent || "" == str.trim();
+        if (isMatch) {
+          // consume test along with `\n` prefix if match
+          consume(str.length + 1);
+          tokens.push(str.substr(indent.length));
+        }
+      } while(input.length > 0 && isMatch);
+      while (input.length == 0 && tokens[tokens.length - 1] == '') tokens.pop();
+      tokens.mapi(function(token, i) {
+        nextLine();
+        if (i != 0) tok(TNewline);
+        addText(token);
+      });
+      tok(TPipelessEnd);
+      return true;
+    }
+		return false;
 	}
 
 	function tag()
@@ -236,6 +261,24 @@ class Lexer {
 	function consume(len : Int)
 		input = input.substring(len);
 
+	function ensureIndentRe() {
+		if(null == indentRe) {
+			var re = ~/^\n(\t*) */,
+					matches = re.match(input);
+			if(matches && (re.matched(1) == null || re.matched(1) == "")) { // TODO check which one is correct
+				re = ~/^\n( *)/;
+				matches = re.match(input);
+			}
+
+			if(matches && re.matched(1) != null && re.matched(1) != "") { // TODO check which one is correct
+				indentRe = re;
+			}
+			return null != indentRe;
+		} else {
+			return false;
+		}
+	}
+
 	function nextLine()
 		lineNumber++;
 
@@ -260,7 +303,7 @@ class Lexer {
 	function advance()
 		return blank()
 			|| eos()
-			//|| pipelessText()
+			|| pipelessText()
 			|| doctype()
 			|| expression()
 			|| tag()
