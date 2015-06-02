@@ -28,7 +28,7 @@ class Lexer {
 		input = (~/^\uFEFF/).replace(input, "");
 		// normalize endlines
 		input = (~/\r\n|\n\r|\r/).replace(input, "\n");
-		input = input.trim();
+		input = input.rtrim();
 
 		this.source = source;
 		this.interpolated = interpolated;
