@@ -1,8 +1,8 @@
 import utest.Assert;
-
 using thx.Arrays;
 using thx.Strings;
 using thx.Tuple;
+import jaxe.core.*;
 import jaxe.core.Lexer;
 import jaxe.core.Token;
 import jaxe.core.Tokens;
@@ -13,15 +13,24 @@ class TestLexer {
 	public function testCases() {
 		var cases = loadCases("test/cases/lexer");
 		cases.map(function(p : TU) {
-			var c : Array<TokenObject> = yaml.Yaml.parse(p.right.content, yaml.Parser.options().useObjects());
 			var lexer = new Lexer(p.left.content, p.left.name),
-					tokens,
-					obs : Array<TokenObject> = yaml.Yaml.parse(p.right.content, yaml.Parser.options().useObjects()),
-					expected = obs.pluck(Tokens.fromObject(_));
+					tokens, obs : Array<TokenObject>, expected;
+			try {
+				obs = yaml.Yaml.parse(p.right.content, yaml.Parser.options().useObjects());
+			} catch(e : Dynamic) {
+				Assert.fail('failed to parse YAML ${p.right.name}');
+				return;
+			}
+			try {
+				expected = obs.pluck(try Tokens.fromObject(_) catch(e : LexerParseError) throw 'Unable to tokenize object: ${e.message}');
+			} catch(e : String) {
+				Assert.fail(e);
+				return;
+			}
 			try {
 				tokens = lexer.getTokens();
 			} catch(e : Dynamic) {
-				Assert.fail('failed to parse ${p.left.name}, error: ${e.message}');
+				Assert.fail('failed to parse ${p.left.name}, error: ${e.message.split("\n").join("\\\\n")}');
 				return;
 			}
 			for(t in tokens.zip(expected)) {
