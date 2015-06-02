@@ -178,6 +178,13 @@ class Lexer {
 				return null;
 			});
 
+	function textFail()
+		return scan(~/^([^\.\n][^\n]+)/, function(reg) {
+			//Warning: missing space before text for line $lineNumber in $source
+			addText(reg.matched(1));
+			return null;
+		});
+
 	function textHtml()
 		return scan(~/^(<.*$)/, function(reg) {
 			return TTextHtml(reg.matched(1));
@@ -266,6 +273,6 @@ class Lexer {
 			|| text()
 			|| textHtml()
 			|| comment()
-			//|| textFail()
+			|| textFail()
 			|| fail();
 }
