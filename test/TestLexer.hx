@@ -15,11 +15,20 @@ class TestLexer {
 		cases.map(function(p : TU) {
 			var c : Array<TokenObject> = yaml.Yaml.parse(p.right.content, yaml.Parser.options().useObjects());
 			var lexer = new Lexer(p.left.content, p.left.name),
-					tokens = lexer.getTokens(),
+					tokens,
 					obs : Array<TokenObject> = yaml.Yaml.parse(p.right.content, yaml.Parser.options().useObjects()),
 					expected = obs.pluck(Tokens.fromObject(_));
-			tokens.zip(expected)
-				.pluck(Assert.same(_.right.token, _.left.token, message(_, p.left.name, expected, tokens)));
+			try {
+				tokens = lexer.getTokens();
+			} catch(e : Dynamic) {
+				Assert.fail('failed to parse ${p.left.name}, error: ${e.message}');
+				return;
+			}
+			for(t in tokens.zip(expected)) {
+				var res = thx.Dynamics.equals(t.right.token, t.left.token);
+				Assert.isTrue(res, message(t, p.left.name, expected, tokens));
+				if(!res) return;
+			}
 			Assert.equals(expected.length, tokens.length);
 		});
 	}
