@@ -46,11 +46,16 @@ class Lexer {
 		return tokens;
 	}
 
-	function blank()
-		return scan(~/^\n( *)$/, function(reg) {
+	function blank() {
+		var re = ~/^\n *\n/;
+		if(re.match(input)) {
 			nextLine();
-			return pipeless ? TLiteral(reg.matched(1)) : null;
-		});
+			consume(re.matched(0).length - 1);
+			if(pipeless) tok(TText(""));
+			return true;
+		}
+		return false;
+	}
 
 	function className()
 		return scan(~/^\.([\w-]+)/, function(reg) {
