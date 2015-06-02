@@ -43,8 +43,6 @@ class Tokens {
 				{ type : "id", value : name, pos : token.pos }
 			case TIndent(indents):
 				{ type : "indent", attr : { indents : indents }, pos : token.pos }
-			case TLiteral(text):
-				{ type : "literal", value : text, pos : token.pos }
 			case TNewline:
 				{ type : "newline", pos : token.pos }
 			case TOutdent:
@@ -84,7 +82,6 @@ class Tokens {
 			case ["filter", name]: TFilter(name);
 			case ["id", name]: TId(name);
 			case ["indent", _]: TIndent(token.attr.indents);
-			case ["literal", text]: TLiteral(text);
 			case ["outdent", _]: TOutdent;
 			case ["pipeless-start", _]: TPipelessStart;
 			case ["pipeless-end", _]: TPipelessEnd;

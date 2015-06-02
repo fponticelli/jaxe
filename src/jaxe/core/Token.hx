@@ -20,7 +20,6 @@ enum TToken {
 	TFilter(name : String);
 	TId(name : String);
 	TIndent(indents : Int);
-	TLiteral(text : String);
 	TOutdent;
 	TNewline;
 	TPipelessStart;
