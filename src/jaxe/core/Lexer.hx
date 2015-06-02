@@ -102,8 +102,9 @@ class Lexer {
 			return TFilter(reg.matched(1));
 		});
 
-	function fail() : Bool
-		return throw new LexerError('unexpected text: ${input.split("\n").shift()}');
+	function fail() : Bool {
+		return throw new LexerError('unexpected text: "${input.substring(0, 20)}"');
+	}
 
 	function expression()
 		return scan(new EReg('^${(EXPRESSION_SYMBOL + EXPRESSION_OPEN).escape()}', ''), function(reg) {
