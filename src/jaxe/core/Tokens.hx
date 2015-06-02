@@ -49,6 +49,10 @@ class Tokens {
 				{ type : "newline", pos : token.pos }
 			case TOutdent:
 				{ type : "outdent", pos : token.pos }
+			case TPipelessStart:
+				{ type : "pipeless-start", pos : token.pos }
+			case TPipelessEnd:
+				{ type : "pipeless-end", pos : token.pos }
 			case TTag(name, selfClosing):
 				{ type : "tag", value : name, attr : { selfClosing : selfClosing }, pos : token.pos }
 			case TText(text):
@@ -82,6 +86,8 @@ class Tokens {
 			case ["indent", _]: TIndent(token.attr.indents);
 			case ["literal", text]: TLiteral(text);
 			case ["outdent", _]: TOutdent;
+			case ["pipeless-start", _]: TPipelessStart;
+			case ["pipeless-end", _]: TPipelessEnd;
 			case ["newline", _]: TNewline;
 			case ["tag", name]: TTag(name, token.attr.selfClosing);
 			case ["text", text]: TText(text);

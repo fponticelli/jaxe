@@ -17,6 +17,8 @@ class TestLexerSerializer {
 		TExpressionStart,
 		TExpressionEnd,
 		TFilter("fname"),
+		TPipelessStart,
+		TPipelessEnd,
 		TTag("tagname", true),
 		TText("some"),
 		TTextHtml("<br/>"),

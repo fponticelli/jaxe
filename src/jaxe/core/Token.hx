@@ -23,6 +23,8 @@ enum TToken {
 	TLiteral(text : String);
 	TOutdent;
 	TNewline;
+	TPipelessStart;
+	TPipelessEnd;
 	TTag(name : String, selfClosing : Bool);
 	TText(text : String);
 	TTextHtml(html : String);
