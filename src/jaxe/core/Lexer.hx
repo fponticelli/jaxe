@@ -37,7 +37,7 @@ class Lexer {
 		indentRe = null;
 	}
 
-	public function getTokens() {
+	public function getTokens() : Array<Token> {
 		while(!ended)
 			advance();
 		return tokens;
@@ -167,6 +167,17 @@ class Lexer {
 			return TTag(name, selfClosing);
 		});
 
+	function text()
+		return
+			scan(~/^(?:\| ?| )([^\n]+)/, function(reg) {
+				addText(reg.matched(1));
+				return null;
+			}) ||
+			scan(~/^\|?( )/, function(reg) {
+				addText(reg.matched(1));
+				return null;
+			});
+
 	function textHtml()
 		return scan(~/^(<.*$)/, function(reg) {
 			return TTextHtml(reg.matched(1));
@@ -190,8 +201,8 @@ class Lexer {
 			tok(TText(prefix + value.substr(0, indexOfStart)));
 			tok(TExpressionStart);
       var child = new Lexer(value.substr(indexOfStart + 2), source, true);
-      var interpolated = child.getTokens();
-			for(token in interpolated) {
+      var childTokens = child.getTokens();
+			for(token in childTokens) {
         tokens.push(token);
         switch token.token {
 					case TEos:
@@ -252,7 +263,7 @@ class Lexer {
 			//|| attrs(true)
 			//|| attributesBlock()
 			|| indent()
-			//|| text()
+			|| text()
 			|| textHtml()
 			|| comment()
 			//|| textFail()
