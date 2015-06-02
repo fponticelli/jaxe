@@ -59,21 +59,25 @@ class Lexer {
 
 	function className()
 		return scan(~/^\.([\w-]+)/, function(reg) {
+			trace('adding CLASS: ${reg.matched(1)}');
 			return TClassName(reg.matched(1));
 		});
 
 	function comment()
 		return scan(~/^\/\/(-)?([^\n]*)/, function(reg) {
-			if(reg.matched(1) == "-")
+			if(reg.matched(1) == "-") {
+				trace('adding COMMENT INLINE: ${reg.matched(2)}');
 				return TCommentInline(reg.matched(2));
-			else {
+			} else {
 				pipeless = true;
+				trace("adding COMMENT");
 				return TComment;
 			}
 		});
 
 	function doctype()
 		return scan(~/^doctype +([^\n]+)?/, function(reg) {
+			trace('adding DOCTYPE: ${reg.matched(1)}');
 			return TDoctype(switch reg.matched(1) {
 				case "html": HtmlDoctype;
 				case "xml": XmlDoctype;
@@ -89,8 +93,11 @@ class Lexer {
 
 	function eos() {
 		if(input.length > 0) return false;
-		for(i in 0...indentStack.length)
+		for(i in 0...indentStack.length) {
+			trace("adding OUTDENT");
 			tok(TOutdent);
+		}
+		trace("adding EOS");
 		tok(TEos);
 		ended = true;
 		return true;
@@ -99,6 +106,7 @@ class Lexer {
 	function filter()
 		return scan(~/^:([\w\-]+)/, function(reg) {
 			pipeless = true;
+			trace('adding FILTER: ${reg.matched(1)}');
 			return TFilter(reg.matched(1));
 		});
 
@@ -110,14 +118,16 @@ class Lexer {
 		return scan(new EReg('^${(EXPRESSION_SYMBOL + EXPRESSION_OPEN).escape()}', ''), function(reg) {
 			var rest = reg.matchedRight(),
 					close = Utils.match(input, EXPRESSION_OPEN, EXPRESSION_CLOSE);
-			if(close < 0) throw new LexerError('Unable to find closing sequence $EXPRESSION_CLOSE after ${input.substring(0, 20)} ...');
+			if(close < 0) throw new LexerError('Unable to find closing sequence $EXPRESSION_CLOSE after ${input.substring(0, 50).replace("\n", "\\n")} ...');
 			var code = rest.substring(0, close);
 			input = rest.substring(close + EXPRESSION_CLOSE.length);
+			trace('adding EXPRESSION: ${code}');
 			return TExpression(code);
 		});
 
 	function id()
 		return scan(~/^#([\w-]+)/, function(reg) {
+			trace('adding ID: ${reg.matched(1)}');
 			return TId(reg.matched(1));
 		});
 
@@ -141,15 +151,18 @@ class Lexer {
 		// outdent
 		if(indentStack.length > 0 && indents < indentStack[0]) {
 			while(indentStack.length > 0 && indentStack[0] > indents) {
+				trace("adding OUTDENT 2");
 				tok(TOutdent);
 				indentStack.shift();
 			}
 		// indent
 		} else if(indents > 0 && indents != indentStack[0]) {
 			indentStack.unshift(indents);
+			trace('adding INDENT: $indents');
 			tok(TIndent(indents));
 		// newline
 		} else {
+			trace("adding NEWLINE");
 			tok(TNewline);
 		}
 
@@ -163,6 +176,7 @@ class Lexer {
 		var indents = indentRe.matched(1).length;
 
 		if(indents > 0 && (indentStack.length == 0 || indents > indentStack[0])) {
+			trace("adding PIPELESS START");
 			tok(TPipelessStart);
       var indent = indentRe.matched(1).substring(0, 1);
       var tokens = [];
@@ -183,9 +197,13 @@ class Lexer {
       while (input.length == 0 && tokens[tokens.length - 1] == '') tokens.pop();
       tokens.mapi(function(token, i) {
         nextLine();
-        if (i != 0) tok(TNewline);
+        if (i != 0) {
+					trace("adding NEWLINE 2");
+					tok(TNewline);
+				}
         addText(token);
       });
+			trace("adding PIPELESS END");
       tok(TPipelessEnd);
       return true;
     }
@@ -196,16 +214,19 @@ class Lexer {
 		return scan(~/^(\w(?:[-:\w]*\w)?)(\/?)/, function(reg) {
 			var name = reg.matched(1),
 					selfClosing = reg.matched(2) == "/";
+			trace('adding TAG: $name, $selfClosing');
 			return TTag(name, selfClosing);
 		});
 
 	function text()
 		return
 			scan(~/^(?:\| ?| )([^\n]+)/, function(reg) {
+				trace('adding TEXT 1: ${reg.matched(1)}');
 				addText(reg.matched(1));
 				return null;
 			}) ||
 			scan(~/^\|?( )/, function(reg) {
+				trace('adding TEXT 2: ${reg.matched(1)}');
 				addText(reg.matched(1));
 				return null;
 			});
@@ -219,6 +240,7 @@ class Lexer {
 
 	function textHtml()
 		return scan(~/^(<.*$)/, function(reg) {
+			trace('adding HTML: ${reg.matched(1)}');
 			return TTextHtml(reg.matched(1));
 		});
 
@@ -237,7 +259,9 @@ class Lexer {
 		}
 
     if(indexOfStart >= 0 && (indexOfEnd == -1 || indexOfStart < indexOfEnd) && (indexOfEscaped == -1 || indexOfStart < indexOfEscaped)) {
+			trace('adding TEXT 3: ${prefix + value.substr(0, indexOfStart)}');
 			tok(TText(prefix + value.substr(0, indexOfStart)));
+			trace("adding EXPRESSION START");
 			tok(TExpressionStart);
       var child = new Lexer(value.substr(indexOfStart + 2), source, true);
       var childTokens = child.getTokens();
@@ -245,16 +269,19 @@ class Lexer {
         tokens.push(token);
         switch token.token {
 					case TEos:
+						trace("error TEos");
 						throw new LexerError('End of line was reached with no closing $EXPRESSION_CLOSE for interpolation.');
 					case _:
         }
       }
+			trace("adding EXPRESSION END");
 			tok(TExpressionEnd);
       addText(child.input);
       return;
     }
     if(indexOfEnd >= 0 && (indexOfStart == -1 || indexOfEnd < indexOfStart) && (indexOfEscaped == -1 || indexOfEnd < indexOfEscaped)) {
       if("" != prefix + value.substr(0, value.indexOf(EXPRESSION_CLOSE))) {
+				trace('adding TEXT 4: ${prefix + value.substr(0, value.indexOf(EXPRESSION_CLOSE))}');
 				tok(TText(prefix + value.substr(0, value.indexOf(EXPRESSION_CLOSE))));
       }
       this.ended = true;
@@ -262,6 +289,7 @@ class Lexer {
       return;
     }
 
+		trace('adding TEXT 5: ${prefix + value}');
     tok(TText(prefix + value));
 	}
 
