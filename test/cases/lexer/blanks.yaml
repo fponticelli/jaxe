@@ -1,0 +1,25 @@
+- type: newline
+- type: tag
+  value: ul
+  attr: { selfClosing : false }
+- type: indent
+  attr: { indents : 2 }
+- type: tag
+  value: li
+  attr: { selfClosing : false }
+- type: text
+  value: foo
+- type: newline
+- type: tag
+  value: li
+  attr: { selfClosing : false }
+- type: text
+  value: bar
+- type: newline
+- type: tag
+  value: li
+  attr: { selfClosing : false }
+- type: text
+  value: baz
+- type: outdent
+- type: eos
