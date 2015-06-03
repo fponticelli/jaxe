@@ -11,6 +11,8 @@ class Tokens {
 				{ type : "comment", pos : token.pos }
 			case TCommentInline(content):
 				{ type : "comment-inline", value : content, pos : token.pos }
+			case TDoctype(DefaultDoctype):
+				{ type : "doctype", value : "default", pos : token.pos };
 			case TDoctype(HtmlDoctype):
 				{ type : "doctype", value : "html", pos : token.pos };
 			case TDoctype(XmlDoctype):
@@ -65,6 +67,7 @@ class Tokens {
 			case ["class", name]: TClassName(name);
 			case ["comment", _]: TComment;
 			case ["comment-inline", content]: TCommentInline(content);
+			case ["doctype", "default"]: TDoctype(DefaultDoctype);
 			case ["doctype", "html"]: TDoctype(HtmlDoctype);
 			case ["doctype", "xml"]: TDoctype(XmlDoctype);
 			case ["doctype", "transitional"]: TDoctype(XhtmlTransitionalDoctype);

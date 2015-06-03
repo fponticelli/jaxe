@@ -30,6 +30,7 @@ enum TToken {
 }
 
 enum Doctype {
+	DefaultDoctype;
 	HtmlDoctype;
 	XmlDoctype;
 	XhtmlTransitionalDoctype;

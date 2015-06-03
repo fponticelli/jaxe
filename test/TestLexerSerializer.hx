@@ -5,26 +5,27 @@ import jaxe.core.Token;
 import jaxe.core.Tokens;
 
 class TestLexerSerializer {
-	public function new() {}
+  public function new() {}
 
-	public function testComments() [
-		TComment,
-		TCommentInline("my comment"),
-	].map(assertRoundTrip);
+  public function testComments() [
+    TComment,
+    TCommentInline("my comment"),
+  ].map(assertRoundTrip);
 
-	public function testContents() [
-		TExpression("var a = 1;"),
-		TExpressionStart,
-		TExpressionEnd,
-		TFilter("fname"),
-		TPipelessStart,
-		TPipelessEnd,
-		TTag("tagname", true),
-		TText("some"),
-		TTextHtml("<br/>"),
-	].map(assertRoundTrip);
+  public function testContents() [
+    TExpression("var a = 1;"),
+    TExpressionStart,
+    TExpressionEnd,
+    TFilter("fname"),
+    TPipelessStart,
+    TPipelessEnd,
+    TTag("tagname", true),
+    TText("some"),
+    TTextHtml("<br/>"),
+  ].map(assertRoundTrip);
 
   public function testDoctypes() [
+    TDoctype(DefaultDoctype),
     TDoctype(HtmlDoctype),
     TDoctype(XmlDoctype),
     TDoctype(XhtmlTransitionalDoctype),
@@ -38,8 +39,8 @@ class TestLexerSerializer {
 
   public function testUtils() [
     TOutdent,
-		TIndent(3),
-		TNewline,
+    TIndent(3),
+    TNewline,
     TEos
   ].map(assertRoundTrip);
 
