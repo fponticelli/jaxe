@@ -38,6 +38,7 @@ class Lexer {
 		indentStack = [];
 		pipeless = false;
 		indentRe = null;
+		ended = false;
 	}
 
 	public function getTokens() : Array<Token> {
@@ -239,7 +240,7 @@ class Lexer {
 		});
 
 	function textHtml()
-		return scan(~/^(<.*$)/, function(reg) {
+		return scan(~/^(<[^\n]*)/, function(reg) {
 			trace('adding HTML: ${reg.matched(1)}');
 			return TTextHtml(reg.matched(1));
 		});
