@@ -81,7 +81,7 @@ class Lexer {
 		});
 
 	function doctype()
-		return scan(~/^doctype +([^\n]+)?/, function(reg) {
+		return scan(~/^doctype *([^\n]*)/, function(reg) {
 			trace('adding DOCTYPE: ${reg.matched(1)}');
 			return TDoctype(switch reg.matched(1) {
 				case "html": HtmlDoctype;
@@ -92,6 +92,7 @@ class Lexer {
 				case "1.1": Xhtml11Doctype;
 				case "basic": BasicDoctype;
 				case "mobile": MobileDoctype;
+				case "": DefaultDoctype;
 				case custom: CustomDoctype(custom);
 			});
 		});
