@@ -1,3 +1,4 @@
 - type: comment-inline
   value: " inline comment"
+- type: newline
 - type: eos

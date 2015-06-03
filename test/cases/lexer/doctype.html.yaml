@@ -1,3 +1,4 @@
 - type: doctype
   value: html
+- type: newline
 - type: eos
