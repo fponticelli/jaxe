@@ -52,7 +52,11 @@ class Lexer {
 		if(re.match(input)) {
 			nextLine();
 			consume(re.matched(0).length - 1);
-			if(pipeless) tok(TText(""));
+			trace('consume blanks');
+			if(pipeless) {
+				trace('adding TEXT 0: ""');
+				tok(TText(""));
+			}
 			return true;
 		}
 		return false;
@@ -133,9 +137,10 @@ class Lexer {
 		});
 
 	function indent() {
-		if(!ensureIndentRe() || !indentRe.match(input)) return false;
+		var re = ensureIndentRe();
+		if(!re.match(input)) return false;
 
-		var indents = indentRe.matched(1).length;
+		var indents = re.matched(1).length;
 		nextLine();
 		consume(indents + 1); // +1 is for the newline
 		var c = input.substring(0, 1);
@@ -172,14 +177,16 @@ class Lexer {
 	}
 
 	function pipelessText() {
-		if(!pipeless || !ensureIndentRe() || !indentRe.match(input)) return false;
+		if(!pipeless) return false;
+		var re = ensureIndentRe();
+		re.match(input);
 
-		var indents = indentRe.matched(1).length;
+		var indents = re.matched(1).length;
 
 		if(indents > 0 && (indentStack.length == 0 || indents > indentStack[0])) {
 			trace("adding PIPELESS START");
 			tok(TPipelessStart);
-      var indent = indentRe.matched(1).substring(0, 1);
+      var indent = re.matched(1);
       var tokens = [];
       var isMatch;
       do {
@@ -307,11 +314,11 @@ class Lexer {
 			}
 
 			if(matches && re.matched(1) != null && re.matched(1) != "") {
-				indentRe = re;
+				return indentRe = re;
 			}
-			return null != indentRe;
+			return re;
 		} else {
-			return true;
+			return indentRe;
 		}
 	}
 
