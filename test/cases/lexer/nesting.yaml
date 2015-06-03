@@ -1,81 +1,47 @@
-- 
-  attr:
-    selfClosing: false
+- selfClosing: false
   type: tag
   value: ul
--
-  attr:
-    indents: 2
+- indents: 2
   type: indent
--
-  attr:
-    selfClosing: false
+- selfClosing: false
   type: tag
   value: li
--
-  type: text
+- type: text
   value: a
--
-  type: newline
--
-  attr:
-    selfClosing: false
+- type: newline
+- selfClosing: false
   type: tag
   value: li
--
-  type: text
+- type: text
   value: b
--
-  type: newline
--
-  attr:
-    selfClosing: false
+- type: newline
+- selfClosing: false
   type: tag
   value: li
--
-  attr:
-    indents: 4
+- indents: 4
   type: indent
--
-  attr:
-    selfClosing: false
+- selfClosing: false
   type: tag
   value: ul
--
-  attr:
-    indents: 8
+- indents: 8
   type: indent
--
-  attr:
-    selfClosing: false
+- selfClosing: false
   type: tag
   value: li
--
-  type: text
+- type: text
   value: c
--
-  type: newline
--
-  attr:
-    selfClosing: false
+- type: newline
+- selfClosing: false
   type: tag
   value: li
--
-  type: text
+- type: text
   value: d
--
-  type: outdent
--
-  type: outdent
--
-  attr:
-    selfClosing: false
+- type: outdent
+- type: outdent
+- selfClosing: false
   type: tag
   value: li
--
-  type: text
+- type: text
   value: e
--
-  type: outdent
--
-  type: eos
+- type: outdent
+- type: eos

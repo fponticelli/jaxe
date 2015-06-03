@@ -1,21 +1,21 @@
-  - type: "doctype"
-    value: "default"
-  - type: "newline"
-  - type: "tag"
-    value: "html"
-    attr: { selfClosing : false }
-  - type: "indent"
-    attr: { indents : 2 }
-  - type: "tag"
-    value: "body"
-    attr: { selfClosing : false }
-  - type: "indent"
-    attr: { indents : 4 }
-  - type: "tag"
-    value: "h1"
-    attr: { selfClosing : false }
-  - type: "text"
-    value: "Title"
-  - type: "outdent"
-  - type: "outdent"
-  - type: "eos"
+- type: "doctype"
+  value: "default"
+- type: "newline"
+- type: "tag"
+  value: "html"
+  selfClosing: false
+- type: "indent"
+  indents: 2
+- type: "tag"
+  value: "body"
+  selfClosing: false
+- type: "indent"
+  indents: 4
+- type: "tag"
+  value: "h1"
+  selfClosing: false
+- type: "text"
+  value: "Title"
+- type: "outdent"
+- type: "outdent"
+- type: "eos"

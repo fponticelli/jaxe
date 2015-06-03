@@ -1,13 +1,13 @@
-  - type: "tag"
-    value: "p"
-    attr: {selfClosing: false}
-  - type: "text"
-    value: "\"foo\""
-  - type: "newline"
-  - type: "tag"
-    value: "p"
-    attr: {selfClosing: false}
-  - type: "text"
-    value: "'foo'"
-  - type: "newline"
-  - type: "eos"
+- type: "tag"
+  value: "p"
+  selfClosing: false
+- type: "text"
+  value: "\"foo\""
+- type: "newline"
+- type: "tag"
+  value: "p"
+  selfClosing: false
+- type: "text"
+  value: "'foo'"
+- type: "newline"
+- type: "eos"

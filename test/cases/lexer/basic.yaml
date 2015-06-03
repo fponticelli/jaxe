@@ -1,16 +1,16 @@
 - type: tag
   value: html
-  attr: {selfClosing : false}
+  selfClosing: false
 - type: indent
-  attr: { indents : 2 }
+  indents: 2
 - type: tag
   value: body
-  attr: {selfClosing : false}
+  selfClosing: false
 - type: indent
-  attr: { indents : 4 }
+  indents: 4
 - type: tag
   value: h1
-  attr: {selfClosing : false}
+  selfClosing: false
 - type: text
   value: Title
 - type: outdent

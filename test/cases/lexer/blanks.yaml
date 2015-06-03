@@ -1,24 +1,24 @@
 - type: newline
 - type: tag
   value: ul
-  attr: { selfClosing : false }
+  selfClosing: false
 - type: indent
-  attr: { indents : 2 }
+  indents: 2
 - type: tag
   value: li
-  attr: { selfClosing : false }
+  selfClosing: false
 - type: text
   value: foo
 - type: newline
 - type: tag
   value: li
-  attr: { selfClosing : false }
+  selfClosing: false
 - type: text
   value: bar
 - type: newline
 - type: tag
   value: li
-  attr: { selfClosing : false }
+  selfClosing: false
 - type: text
   value: baz
 - type: outdent

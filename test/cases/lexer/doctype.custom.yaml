@@ -1,5 +1,5 @@
 - type: "doctype"
   value: "custom"
-  attr: {"type":"custom stuff"}
+  customType: "custom stuff"
 - type: "newline"
 - type: "eos"

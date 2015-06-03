@@ -30,7 +30,7 @@ class Tokens {
 			case TDoctype(MobileDoctype):
 				{ type : "doctype", value : "mobile", pos : token.pos };
 			case TDoctype(CustomDoctype(value)):
-				{ type : "doctype", value : "custom", attr : { type : value }, pos : token.pos };
+				{ type : "doctype", value : "custom", customType : value, pos : token.pos };
 			case TEos:
 				{ type : "eos", pos : token.pos }
 			case TExpression(code):
@@ -44,7 +44,7 @@ class Tokens {
 			case TId(name):
 				{ type : "id", value : name, pos : token.pos }
 			case TIndent(indents):
-				{ type : "indent", attr : { indents : indents }, pos : token.pos }
+				{ type : "indent", indents : indents, pos : token.pos }
 			case TNewline:
 				{ type : "newline", pos : token.pos }
 			case TOutdent:
@@ -54,7 +54,7 @@ class Tokens {
 			case TPipelessEnd:
 				{ type : "pipeless-end", pos : token.pos }
 			case TTag(name, selfClosing):
-				{ type : "tag", value : name, attr : { selfClosing : selfClosing }, pos : token.pos }
+				{ type : "tag", value : name, selfClosing : selfClosing, pos : token.pos }
 			case TText(text):
 				{ type : "text", value : text, pos : token.pos }
 			case TTextHtml(html):
@@ -76,7 +76,7 @@ class Tokens {
 			case ["doctype", "1.1"]: TDoctype(Xhtml11Doctype);
 			case ["doctype", "basic"]: TDoctype(BasicDoctype);
 			case ["doctype", "mobile"]: TDoctype(MobileDoctype);
-			case ["doctype", "custom"]: TDoctype(CustomDoctype(token.attr.type));
+			case ["doctype", "custom"]: TDoctype(CustomDoctype(token.customType));
 			case ["doctype", unknown]: throw new LexerParseError('unknown doctype $unknown');
 			case ["eos", _]: TEos;
 			case ["expression", code]: TExpression(code);
@@ -84,12 +84,12 @@ class Tokens {
 			case ["expression-end", _]: TExpressionEnd;
 			case ["filter", name]: TFilter(name);
 			case ["id", name]: TId(name);
-			case ["indent", _]: TIndent(token.attr.indents);
+			case ["indent", _]: TIndent(token.indents);
 			case ["outdent", _]: TOutdent;
 			case ["pipeless-start", _]: TPipelessStart;
 			case ["pipeless-end", _]: TPipelessEnd;
 			case ["newline", _]: TNewline;
-			case ["tag", name]: TTag(name, token.attr.selfClosing);
+			case ["tag", name]: TTag(name, token.selfClosing);
 			case ["text", text]: TText(text);
 			case ["text-html", html]: TTextHtml(html);
 			case [type, _]: throw new LexerParseError('unknown object type $type');
@@ -103,8 +103,10 @@ class Tokens {
 
 typedef TokenObject = {
 	type : String,
+	?indents : Int,
+	?selfClosing : Bool,
+	?customType : String,
 	?value : String,
-	?attr : Dynamic,
 	pos : {
 		line : Int,
 		source : String
