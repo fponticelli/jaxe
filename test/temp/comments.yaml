@@ -1,0 +1,103 @@
+- type: newline
+- type: comment
+  value: " foo"
+  attr: {buffer:true}
+- type: newline
+- type: tag
+  value: "ul"
+  attr: {selfClosing:false}
+- type : indent
+  attr: {indents:2}
+- type: comment
+  value: " bar"
+  attr: {buffer:true}
+- type: newline
+- type: tag
+  value: "li"
+  attr: {selfClosing:false}
+- type: text
+  value: "one"
+- type: newline
+- type: comment
+  value: " baz"
+  attr: {buffer:true}
+- type: newline
+- type: tag
+  value: "li"
+  attr: {selfClosing:false}
+- type: text
+  value: "two"
+- type: outdent
+- type: comment
+  value: ""
+  attr: {buffer:true}
+- type: pipeless-start
+- type: text
+  value: "ul"
+- type: newline
+- type: text
+  value: "  li foo"
+- type: newline
+- type: text
+  value: ""
+- type: pipeless-end
+- type: newline
+- type: comment
+  value: " block"
+  attr: {buffer:true}
+- type: pipeless-start
+- type: text
+  value: "// inline follow"
+- type: newline
+- type: text
+  value: "li three"
+- type: newline
+- type: text
+  value: ""
+- type: pipeless-end
+- type: newline
+- type: comment
+  value: " block"
+  attr: {buffer:true}
+- type: pipeless-start
+- type: text
+  value: "// inline followed by tags"
+- type: newline
+- type: text
+  value: "ul"
+- type: newline
+- type: text
+  value: "  li four"
+- type: newline
+- type: text
+  value: ""
+- type: pipeless-end
+- type: newline
+- type: comment
+  value: "if IE lt 9"
+  attr: {buffer:true}
+- type: pipeless-start
+- type: text
+  value: "// inline"
+- type: newline
+- type: text
+  value: "script(src='/lame.js')"
+- type: newline
+- type: text
+  value: "// end-inline"
+- type: newline
+- type: text
+  value: ""
+- type: pipeless-end
+- type: newline
+- type: tag
+  value: "p"
+  attr: {selfClosing:false}
+- type: text
+  value: "five"
+- type: newline
+- type : class
+  value: "foo"
+- type: text
+  value: "// not a comment"
+- type: eos

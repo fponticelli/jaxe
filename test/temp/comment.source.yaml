@@ -1,0 +1,50 @@
+  -
+    type: "comment"
+    value: ""
+    attr: {buffer: false}
+  -
+    type: "pipeless-start"
+  -
+    type: "text"
+    value: "s/s."
+  -
+    type: "newline"
+  -
+    type: "text"
+    value: ""
+  -
+    type: "pipeless-end"
+  -
+    type: "newline"
+  -
+    type: "comment"
+    value: " test/cases/comments.source.jade"
+    attr: {buffer: false}
+  -
+    type: "text"
+    value: ""
+  -
+    type: "newline"
+  -
+    type: "comment"
+    value: ""
+    attr: {buffer: false}
+  -
+    type: "pipeless-start"
+  -
+    type: "text"
+    value: "test/cases/comments.source.jade"
+  -
+    type: "newline"
+  -
+    type: "text"
+    value: "when"
+  -
+    type: "newline"
+  -
+    type: "text"
+    value: "()"
+  -
+    type: "pipeless-end"
+  -
+    type: "eos"
