@@ -27,7 +27,7 @@ class Lexer {
 		// normalize BOM
 		input = (~/^\uFEFF/).replace(input, "");
 		// normalize endlines
-		input = (~/\r\n|\n\r|\r/).replace(input, "\n");
+		input = (~/\r\n|\n\r|\r/g).replace(input, "\n");
 		//input = input.rtrim();
 
 		this.source = source;
