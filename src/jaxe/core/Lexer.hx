@@ -28,7 +28,7 @@ class Lexer {
 		input = (~/^\uFEFF/).replace(input, "");
 		// normalize endlines
 		input = (~/\r\n|\n\r|\r/).replace(input, "\n");
-		input = input.rtrim();
+		//input = input.rtrim();
 
 		this.source = source;
 		this.interpolated = interpolated;
@@ -183,15 +183,15 @@ class Lexer {
       var isMatch;
       do {
         // text has `\n` as a prefix
-        var i = input.substr(1).indexOf('\n');
+        var i = input.substring(0, 1).indexOf('\n');
         if (-1 == i)
 					i = input.length - 1;
-        var str = input.substr(1, i);
-        isMatch = str.substr(0, indent.length) == indent || "" == str.trim();
+        var str = input.substring(1, i+1);
+        isMatch = str.substring(0, indent.length) == indent || "" == str.trim();
         if (isMatch) {
           // consume test along with `\n` prefix if match
           consume(str.length + 1);
-          tokens.push(str.substr(indent.length));
+          tokens.push(str.substring(0, indent.length));
         }
       } while(input.length > 0 && isMatch);
       while (input.length == 0 && tokens[tokens.length - 1] == '') tokens.pop();
@@ -253,17 +253,17 @@ class Lexer {
     var indexOfEscaped = value.indexOf('\\$EXPRESSION_PREFIX');
 
 		if(indexOfEscaped >= 0 && (indexOfEnd == - 1 || indexOfEscaped < indexOfEnd) && (indexOfStart == -1 || indexOfEscaped < indexOfStart)) {
-			prefix = prefix + value.substr(0, value.indexOf('\\$EXPRESSION_PREFIX')) + EXPRESSION_PREFIX;
-		  addText(value.substr(value.indexOf('\\$EXPRESSION_PREFIX') + EXPRESSION_PREFIX.length + 1), prefix);
+			prefix = prefix + value.substring(0, value.indexOf('\\$EXPRESSION_PREFIX')) + EXPRESSION_PREFIX;
+		  addText(value.substring(0, value.indexOf('\\$EXPRESSION_PREFIX') + EXPRESSION_PREFIX.length + 1), prefix);
 			return;
 		}
 
     if(indexOfStart >= 0 && (indexOfEnd == -1 || indexOfStart < indexOfEnd) && (indexOfEscaped == -1 || indexOfStart < indexOfEscaped)) {
-			trace('adding TEXT 3: ${prefix + value.substr(0, indexOfStart)}');
-			tok(TText(prefix + value.substr(0, indexOfStart)));
+			trace('adding TEXT 3: ${prefix + value.substring(0, indexOfStart)}');
+			tok(TText(prefix + value.substring(0, indexOfStart)));
 			trace("adding EXPRESSION START");
 			tok(TExpressionStart);
-      var child = new Lexer(value.substr(indexOfStart + 2), source, true);
+      var child = new Lexer(value.substring(0, indexOfStart + 2), source, true);
       var childTokens = child.getTokens();
 			for(token in childTokens) {
         tokens.push(token);
@@ -280,12 +280,12 @@ class Lexer {
       return;
     }
     if(indexOfEnd >= 0 && (indexOfStart == -1 || indexOfEnd < indexOfStart) && (indexOfEscaped == -1 || indexOfEnd < indexOfEscaped)) {
-      if("" != prefix + value.substr(0, value.indexOf(EXPRESSION_CLOSE))) {
-				trace('adding TEXT 4: ${prefix + value.substr(0, value.indexOf(EXPRESSION_CLOSE))}');
-				tok(TText(prefix + value.substr(0, value.indexOf(EXPRESSION_CLOSE))));
+      if("" != prefix + value.substring(0, value.indexOf(EXPRESSION_CLOSE))) {
+				trace('adding TEXT 4: ${prefix + value.substring(0, value.indexOf(EXPRESSION_CLOSE))}');
+				tok(TText(prefix + value.substring(0, value.indexOf(EXPRESSION_CLOSE))));
       }
       this.ended = true;
-      this.input = value.substr(value.indexOf(EXPRESSION_CLOSE) + EXPRESSION_CLOSE.length) + this.input;
+      this.input = value.substring(0, value.indexOf(EXPRESSION_CLOSE) + EXPRESSION_CLOSE.length) + this.input;
       return;
     }
 
