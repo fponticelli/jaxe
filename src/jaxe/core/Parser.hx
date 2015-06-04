@@ -1,15 +1,15 @@
 package jaxe.core;
 
-import tokens.Tokens as T;
 import jaxe.core.Node;
 import jaxe.core.Token;
+import jaxe.core.TokenStream;
 
 @:access(jaxe.core.Lexer)
 class Parser {
-  var tokens : T<Token>;
+  var tokens : TokenStream<Token>;
   var source : String;
   public function new(toks : Array<Token>, source : String) {
-    this.tokens = new T(toks);
+    this.tokens = new TokenStream(toks);
     this.source = source;
   }
 

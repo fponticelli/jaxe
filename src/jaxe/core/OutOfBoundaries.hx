@@ -1,4 +1,4 @@
-package tokens;
+package jaxe.core;
 
 class OutOfBoundaries extends thx.Error {
   public function new()

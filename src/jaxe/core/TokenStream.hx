@@ -1,8 +1,8 @@
-package tokens;
+package jaxe.core;
 
 using thx.Arrays;
 
-class Tokens<T> {
+class TokenStream<T> {
   var tokens : Array<T>;
   public function new(tokens : Array<T>)
     this.tokens = tokens;
