@@ -2,7 +2,6 @@
 -lib thx.core
 -lib hxnodejs
 -lib yaml
--lib tokens
 -cp src
 -cp test
 -js bin/test.js
