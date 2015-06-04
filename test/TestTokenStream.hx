@@ -2,22 +2,13 @@ import utest.Assert;
 import utest.Runner;
 import utest.ui.Report;
 
-import tokens.*;
+import jaxe.core.*;
 
-class TestAll {
-  static function main() {
-    var runner = new Runner();
-
-    runner.addCase(new TestAll());
-
-    Report.create(runner);
-    runner.run();
-  }
-
+class TestTokenStream {
   public function new() {}
 
   public function testTokens() {
-    var stream = new Tokens(['a', 'b', 'c', 'd']);
+    var stream = new TokenStream(['a', 'b', 'c', 'd']);
     Assert.raises(function() stream.lookahead(9), OutOfBoundaries);
 
     Assert.isTrue(stream.canAdvance());
