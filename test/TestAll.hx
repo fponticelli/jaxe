@@ -6,6 +6,7 @@ class TestAll {
 
 		runner.addCase(new TestLexer());
 		runner.addCase(new TestLexerSerializer());
+		runner.addCase(new TestParser());
 		runner.addCase(new TestUtils());
 
 		utest.ui.Report.create(runner);

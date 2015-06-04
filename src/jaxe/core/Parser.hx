@@ -1,15 +1,22 @@
 package jaxe.core;
 
+import tokens.Tokens as T;
+
 @:access(jaxe.core.Lexer)
 class Parser {
-  var input : String;
+  var tokens : T<Token>;
   var source : String;
-  var lexer : Lexer;
-  public function new(content : String, source : String) {
-    lexer = new Lexer(content, string);
+  public function new(toks : Array<Token>, source : String) {
+    this.tokens = new T(toks);
+    this.source = source;
   }
 
-  public function parse() {
-    
+  function error(message : String, ?pos : haxe.PosInfos) {
+    throw new ParserError(message, pos);
+  }
+
+  // utility
+  function peek() {
+
   }
 }
