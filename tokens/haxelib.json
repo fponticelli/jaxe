@@ -1,0 +1,14 @@
+{
+  "name": "tokens",
+  "url": "https://github.com/fponticelli/tokens",
+  "license": "MIT",
+  "classPath": "src",
+  "tags": ["token", "parser", "lexer"],
+  "description": "Token stream helper ported from https://github.com/jadejs/token-stream.",
+  "releasenote": "First release.",
+  "version": "0.1.0",
+  "contributors": ["fponticelli"],
+  "dependencies" : {
+    "thx.core" : ""
+  }
+}
