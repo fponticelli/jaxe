@@ -21,7 +21,7 @@ class Parser {
       switch next.token {
         case TEos: break;
         case TNewline: advance();
-        case other: error('Not Implemented Yet: other');
+        case other: error('Not Implemented Yet: $other');
       }
     }
 
