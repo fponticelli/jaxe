@@ -17,15 +17,21 @@ class Parser {
     var block = new Block([], 0, source),
         next;
     while(true) {
-      next = peek();
+      next = advance(); // was peek
       switch next.token {
         case TEos: break;
-        case TNewline: advance();
+        case TNewline: // advance();
+        case TTag(name, selfClosing):
+          parseTag(name, selfClosing);
         case other: error('Not Implemented Yet: $other');
       }
     }
 
     return block;
+  }
+
+  function parseTag(name : String, selfClosing : Bool) {
+    var tag = new Tag();
   }
 
   // utility
