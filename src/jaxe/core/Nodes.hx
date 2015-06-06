@@ -8,8 +8,6 @@ class Nodes {
 	}
 
 	public static function fromObject(obj : NodeObject) : Node {
-		trace(obj.type);
-		trace(obj.pos);
 		return switch obj.type {
       case "block": Block.fromObject(obj);
 			case "tag": Tag.fromObject(obj);
