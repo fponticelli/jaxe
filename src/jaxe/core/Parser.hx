@@ -38,8 +38,13 @@ class Parser {
   inline function advance()
     return tokens.advance();
 
-  function error(message : String, ?pos : haxe.PosInfos)
-    throw new ParserError(message, pos);
+  inline function defer(token : Token)
+    return tokens.defer(token);
+
+  function error(message : String, pos : {}, ?posInfo : haxe.PosInfos) {
+    // TODO pos
+    throw new ParserError(message, posInfo);
+  }
 
   inline function peek()
     return tokens.peek();
