@@ -23,7 +23,7 @@ class Parser {
         case TNewline: // advance();
         case TTag(name, selfClosing):
           parseTag(name, selfClosing, next.pos);
-        case other: error('Not Implemented Yet: $other');
+        case other: error('Not Implemented Yet: $other', next.pos);
       }
     }
 
@@ -31,7 +31,25 @@ class Parser {
   }
 
   function parseTag(name : String, selfClosing : Bool, pos) {
-    var tag = new Tag(name, selfClosing, [], pos.line, pos.source);
+    var tag = new Tag(name, selfClosing, [], pos.line, pos.source),
+        next;
+    while(true) {
+      next = advance(); // was peek
+      switch next.token {
+        case TId(name) if(tag.attributes.exists("id")):
+          error('duplicate id: $name', next.pos);
+        case TId(name):
+          tag.attributes.set("id", Literal(name));
+        case TClassName(name) if(tag.attributes.exists("class")):
+          var left = tag.attributes.get("class");
+          tag.attributes.set("class", Composite(left, Literal(name)));
+        case TClassName(name):
+          tag.attributes.set("class", Literal(name));
+        case _:
+          defer(next);
+          break;
+      }
+    }
   }
 
   // utility
