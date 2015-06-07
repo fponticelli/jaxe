@@ -2,6 +2,7 @@ package jaxe.core;
 
 import jaxe.core.Nodes;
 using thx.Arrays;
+using thx.MapList;
 
 class Node {
   public var line : Int;
@@ -53,10 +54,12 @@ class Tag extends Block {
 
   public var name : String;
   public var selfClosing : Bool;
+  public var attributes : StringMapList<Content>;
   public function new(name : String, selfClosing : Bool, nodes : Array<Node>, line : Int, source : String) {
     super(nodes, line, source);
     this.name = name;
     this.selfClosing = selfClosing;
+    this.attributes = new StringMapList();
   }
 
   override function toObject() : NodeObject {
@@ -86,4 +89,18 @@ class Text extends Node {
     o.content = content;
     return o;
   }
+}
+
+class Attribute {
+  public var name : String;
+  public var content : Content;
+  public function new(name : String, content : Content) {
+    this.name = name;
+    this.content = content;
+  }
+}
+
+enum Content {
+  Literal(value : String);
+  Expression(code : String);
 }
