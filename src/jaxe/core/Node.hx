@@ -94,4 +94,5 @@ class Text extends Node {
 enum Content {
   Literal(value : String);
   Expression(code : String);
+  Composite(left : Content, right : Content);
 }
