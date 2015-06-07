@@ -22,7 +22,7 @@ class Parser {
         case TEos: break;
         case TNewline: // advance();
         case TTag(name, selfClosing):
-          parseTag(name, selfClosing);
+          parseTag(name, selfClosing, next.pos);
         case other: error('Not Implemented Yet: $other');
       }
     }
@@ -30,8 +30,8 @@ class Parser {
     return block;
   }
 
-  function parseTag(name : String, selfClosing : Bool) {
-    var tag = new Tag();
+  function parseTag(name : String, selfClosing : Bool, pos) {
+    var tag = new Tag(name, selfClosing, [], pos.line, pos.source);
   }
 
   // utility
