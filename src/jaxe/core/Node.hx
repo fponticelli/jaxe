@@ -91,15 +91,6 @@ class Text extends Node {
   }
 }
 
-class Attribute {
-  public var name : String;
-  public var content : Content;
-  public function new(name : String, content : Content) {
-    this.name = name;
-    this.content = content;
-  }
-}
-
 enum Content {
   Literal(value : String);
   Expression(code : String);
