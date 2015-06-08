@@ -19,16 +19,21 @@ class Parser {
     while(true) {
       next = advance(); // was peek
       switch next.token {
+        case TDoctype(doctype):
+          block.nodes.push(parseDoctype(doctype, next.pos));
         case TEos: break;
         case TNewline: // advance();
         case TTag(name, selfClosing):
-          parseTag(name, selfClosing, next.pos);
+          block.nodes.push(parseTag(name, selfClosing, next.pos));
         case other: error('Not Implemented Yet: $other', next.pos);
       }
     }
 
     return block;
   }
+
+  function parseDoctype(doc : Doctype, pos)
+    return new DoctypeNode(doc, pos.line, pos.source);
 
   function parseTag(name : String, selfClosing : Bool, pos) {
     var tag = new Tag(name, selfClosing, [], pos.line, pos.source),
