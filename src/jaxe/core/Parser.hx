@@ -54,8 +54,9 @@ class Parser {
     while(true) {
       next = advance();
       switch next.token {
-      case TText(text):
-          // parseText
+        case TText(text):
+          var t = parseText(text, next.pos);
+          tag.nodes.push(t);
           break;
         case TNewline:
           // do nothing
@@ -68,6 +69,25 @@ class Parser {
           break;
       }
     }
+
+    return tag;
+  }
+
+  function parseText(text : String, pos) {
+    var next;
+    while(true) {
+      next = advance();
+      switch next.token {
+        case TText(ntext):
+          text += ntext;
+        case TNewline:
+          text += "\n";
+        case _:
+          defer(next);
+          break;
+      }
+    }
+    return new Text(text, pos.line, pos.source);
   }
 
   // utility
