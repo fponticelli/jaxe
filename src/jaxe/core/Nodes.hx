@@ -26,5 +26,7 @@ typedef NodeObject = {
 	?nodes : Array<NodeObject>,
 	?name : String,
 	?content : String,
-	?selfClosing : Bool
+	?selfClosing : Bool,
+	?doctype : String,
+	?customType : String
 }
