@@ -1,6 +1,7 @@
 package jaxe.core;
 
 import jaxe.core.Nodes;
+import jaxe.core.Token;
 using thx.Arrays;
 using thx.MapList;
 
@@ -87,6 +88,61 @@ class Text extends Node {
     var o = super.toObject();
     o.type = "test";
     o.content = content;
+    return o;
+  }
+}
+
+class DoctypeNode extends Node {
+  public static function fromObject(ob : NodeObject) {
+    if(ob.type != "doctype") throw new ParserParseError('Doctype.fromObject is working on wrong type.');
+    var doctype = switch ob.doctype {
+          case "default": DefaultDoctype;
+    			case "html": HtmlDoctype;
+    			case "xml": XmlDoctype;
+    			case "transitional": XhtmlTransitionalDoctype;
+    			case "strict": XhtmlStrictDoctype;
+    			case "frameset": XhtmlFramesetDoctype;
+    			case "1.1": Xhtml11Doctype;
+    			case "basic": BasicDoctype;
+    			case "mobile": MobileDoctype;
+        case "custom": CustomDoctype(ob.customType);
+    			case unknown: throw new LexerParseError('unknown doctype $unknown');
+        };
+    return new DoctypeNode(doctype, ob.pos.line, ob.pos.source);
+  }
+
+  public var doctype : Doctype;
+  public function new(doctype : Doctype, line : Int, source : String) {
+    super(line, source);
+    this.doctype = doctype;
+  }
+
+  override function toObject() : NodeObject {
+    var o = super.toObject();
+    o.type = "doctype";
+    switch doctype {
+      case DefaultDoctype:
+        o.doctype = "default";
+      case HtmlDoctype:
+        o.doctype = "html";
+      case XmlDoctype:
+        o.doctype = "xml";
+      case XhtmlTransitionalDoctype:
+        o.doctype = "transitional";
+      case XhtmlStrictDoctype:
+        o.doctype = "strict";
+      case XhtmlFramesetDoctype:
+        o.doctype = "frameset";
+      case Xhtml11Doctype:
+        o.doctype = "1.1";
+      case BasicDoctype:
+        o.doctype = "basic";
+      case MobileDoctype:
+        o.doctype = "mobile";
+      case CustomDoctype(value):
+        o.doctype = "custom";
+        o.customType = value;
+    }
     return o;
   }
 }
