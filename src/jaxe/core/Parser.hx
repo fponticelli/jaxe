@@ -50,6 +50,24 @@ class Parser {
           break;
       }
     }
+
+    while(true) {
+      next = advance();
+      switch next.token {
+      case TText(text):
+          // parseText
+          break;
+        case TNewline:
+          // do nothing
+        case TIndent(indents):
+        case TOutdent:
+        case TEos:
+        case TPipelessStart:
+        case _:
+          error('Unexpected token $next', next.pos);
+          break;
+      }
+    }
   }
 
   // utility
