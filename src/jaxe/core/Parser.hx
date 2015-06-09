@@ -19,6 +19,8 @@ class Parser {
     while(true) {
       next = advance(); // was peek
       switch next.token {
+        case TComment:
+          block.nodes.push(parseComment(next.pos));
         case TCommentInline(text):
           block.nodes.push(new Comment(text, next.pos));
         case TDoctype(doctype):
@@ -32,6 +34,28 @@ class Parser {
     }
 
     return block;
+  }
+
+  function parseComment(pos : Position) {
+    var text = parseTextBlock();
+    return new Comment(text, pos);
+  }
+
+  function parseTextBlock() {
+    var text = "",
+        next;
+    while(true) {
+      next = advance();
+      switch next.token {
+        case TText(ntext):
+          text += ntext;
+        case TNewline:
+          text += "\n";
+        case _:
+          defer(next);
+          return text;
+      }
+    }
   }
 
   function parseDoctype(doc : Doctype, pos : Position)
@@ -80,22 +104,8 @@ class Parser {
     return tag;
   }
 
-  function parseText(text : String, pos : Position) {
-    var next;
-    while(true) {
-      next = advance();
-      switch next.token {
-        case TText(ntext):
-          text += ntext;
-        case TNewline:
-          text += "\n";
-        case _:
-          defer(next);
-          break;
-      }
-    }
-    return new Text(text, pos);
-  }
+  function parseText(text : String, pos : Position)
+    return new Text(parseTextBlock(), pos);
 
   // utility
   inline function advance()
