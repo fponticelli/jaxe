@@ -46,6 +46,26 @@ class Block extends Node {
   }
 }
 
+class Comment extends Node {
+  public static function fromObject(ob : NodeObject) {
+    if(ob.type != "comment") throw new ParserParseError('Comment.fromObject is working on wrong type.');
+    return new Comment(ob.content, ob.pos.line, ob.pos.source);
+  }
+
+  public var content : String;
+  public function new(content : String, line : Int, source : String) {
+    super(line, source);
+    this.content = content;
+  }
+
+  override function toObject() : NodeObject {
+    var o = super.toObject();
+    o.type = "comment";
+    o.content = content;
+    return o;
+  }
+}
+
 class Tag extends Block {
   public static function fromObject(ob : NodeObject) {
     if(ob.type != "tag") throw new ParserParseError('Tag.fromObject is working on wrong type.');
