@@ -14,13 +14,13 @@ class Parser {
   }
 
   public function parse() {
-    var block = new Block([], 0, source),
+    var block = new Block([], { line : 0, source : source }),
         next;
     while(true) {
       next = advance(); // was peek
       switch next.token {
         case TCommentInline(text):
-          block.nodes.push(new Comment(text, next.pos.line, next.pos.source));
+          block.nodes.push(new Comment(text, next.pos));
         case TDoctype(doctype):
           block.nodes.push(parseDoctype(doctype, next.pos));
         case TEos: break;
@@ -34,11 +34,11 @@ class Parser {
     return block;
   }
 
-  function parseDoctype(doc : Doctype, pos)
-    return new DoctypeNode(doc, pos.line, pos.source);
+  function parseDoctype(doc : Doctype, pos : Position)
+    return new DoctypeNode(doc, pos);
 
-  function parseTag(name : String, selfClosing : Bool, pos) {
-    var tag = new Tag(name, selfClosing, [], pos.line, pos.source),
+  function parseTag(name : String, selfClosing : Bool, pos : Position) {
+    var tag = new Tag(name, selfClosing, [], pos),
         next;
     while(true) {
       next = advance(); // was peek
@@ -80,7 +80,7 @@ class Parser {
     return tag;
   }
 
-  function parseText(text : String, pos) {
+  function parseText(text : String, pos : Position) {
     var next;
     while(true) {
       next = advance();
@@ -94,7 +94,7 @@ class Parser {
           break;
       }
     }
-    return new Text(text, pos.line, pos.source);
+    return new Text(text, pos);
   }
 
   // utility

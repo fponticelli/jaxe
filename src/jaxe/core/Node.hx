@@ -6,18 +6,16 @@ using thx.Arrays;
 using thx.MapList;
 
 class Node {
-  public var line : Int;
-  public var source : String;
-  public function new(line : Int, source : String) {
-    this.line = line;
-    this.source = source;
+  public var position : Position;
+  public function new(position : Position) {
+    this.position = null == position ? { line : -1, source : null } : position;
   }
 
   public function toObject() : NodeObject {
     var ob = {
       pos : {
-        line : line,
-        source : source
+        line   : position.line,
+        source : position.source
       },
       type : null
     };
@@ -29,12 +27,12 @@ class Block extends Node {
   public static function fromObject(ob : NodeObject) {
     if(ob.type != "block") throw new ParserParseError('Block.fromObject is working on wrong type.');
     var nodes = ob.nodes.map(Nodes.fromObject);
-    return new Block(nodes, ob.pos.line, ob.pos.source);
+    return new Block(nodes, ob.pos);
   }
 
   public var nodes : Array<Node>;
-  public function new(nodes : Array<Node>, line : Int, source : String) {
-    super(line, source);
+  public function new(nodes : Array<Node>, position : Position) {
+    super(position);
     this.nodes = nodes;
   }
 
@@ -49,12 +47,12 @@ class Block extends Node {
 class Comment extends Node {
   public static function fromObject(ob : NodeObject) {
     if(ob.type != "comment") throw new ParserParseError('Comment.fromObject is working on wrong type.');
-    return new Comment(ob.content, ob.pos.line, ob.pos.source);
+    return new Comment(ob.content, ob.pos);
   }
 
   public var content : String;
-  public function new(content : String, line : Int, source : String) {
-    super(line, source);
+  public function new(content : String, position : Position) {
+    super(position);
     this.content = content;
   }
 
@@ -70,14 +68,14 @@ class Tag extends Block {
   public static function fromObject(ob : NodeObject) {
     if(ob.type != "tag") throw new ParserParseError('Tag.fromObject is working on wrong type.');
     var nodes = ob.nodes.map(Nodes.fromObject);
-    return new Tag(ob.name, ob.selfClosing, nodes, ob.pos.line, ob.pos.source);
+    return new Tag(ob.name, ob.selfClosing, nodes, ob.pos);
   }
 
   public var name : String;
   public var selfClosing : Bool;
   public var attributes : StringMapList<Content>;
-  public function new(name : String, selfClosing : Bool, nodes : Array<Node>, line : Int, source : String) {
-    super(nodes, line, source);
+  public function new(name : String, selfClosing : Bool, nodes : Array<Node>, position : Position) {
+    super(nodes, position);
     this.name = name;
     this.selfClosing = selfClosing;
     this.attributes = new StringMapList();
@@ -95,12 +93,12 @@ class Tag extends Block {
 class Text extends Node {
   public static function fromObject(ob : NodeObject) {
     if(ob.type != "text") throw new ParserParseError('Text.fromObject is working on wrong type.');
-    return new Text(ob.content, ob.pos.line, ob.pos.source);
+    return new Text(ob.content, ob.pos);
   }
 
   public var content : String;
-  public function new(content : String, line : Int, source : String) {
-    super(line, source);
+  public function new(content : String, position : Position) {
+    super(position);
     this.content = content;
   }
 
@@ -128,12 +126,12 @@ class DoctypeNode extends Node {
         case "custom": CustomDoctype(ob.customType);
     			case unknown: throw new LexerParseError('unknown doctype $unknown');
         };
-    return new DoctypeNode(doctype, ob.pos.line, ob.pos.source);
+    return new DoctypeNode(doctype, ob.pos);
   }
 
   public var doctype : Doctype;
-  public function new(doctype : Doctype, line : Int, source : String) {
-    super(line, source);
+  public function new(doctype : Doctype, position : Position) {
+    super(position);
     this.doctype = doctype;
   }
 
@@ -171,4 +169,9 @@ enum Content {
   Literal(value : String);
   Expression(code : String);
   Composite(left : Content, right : Content);
+}
+
+typedef Position = {
+  line : Int,
+  source : String
 }
