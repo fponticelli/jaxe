@@ -19,6 +19,8 @@ class Parser {
     while(true) {
       next = advance(); // was peek
       switch next.token {
+        case TCommentInline(text):
+          block.nodes.push(new Comment(text, next.pos.line, next.pos.source));
         case TDoctype(doctype):
           block.nodes.push(parseDoctype(doctype, next.pos));
         case TEos: break;
