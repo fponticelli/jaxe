@@ -1,5 +1,6 @@
 import utest.Assert;
 using thx.Arrays;
+using thx.Functions;
 using thx.Strings;
 using thx.Tuple;
 import jaxe.core.*;
@@ -22,7 +23,7 @@ class TestLexer {
 				return;
 			}
 			try {
-				expected = obs.pluck(try Tokens.fromObject(_) catch(e : LexerParseError) throw 'Unable to tokenize object: ${e.message}');
+				expected = obs.map.fn(try Tokens.fromObject(_) catch(e : LexerParseError) throw 'Unable to tokenize object: ${e.message}');
 			} catch(e : String) {
 				Assert.fail('in ${p.left.name} $e');
 				return;
@@ -43,15 +44,15 @@ class TestLexer {
 	}
 
 	function message(t, name : String, expected : Array<Token>, test : Array<Token>) {
-		return 'in ${name} expected ${expected.pluck(_.token)} but got ${test.pluck(_.token)}';
+		return 'in ${name} expected ${expected.map.fn(_.token)} but got ${test.map.fn(_.token)}';
 	}
 
 	function loadCases(path : String) : Array<TU> {
 		function t(list : Array<String>, ext : String)
 			return list
-				.filterPluck(_.endsWith('.$ext'))
+				.filter.fn(_.endsWith('.$ext'))
 				.order(Strings.compare)
-				.pluck({
+				.map.fn({
 					name : _,
 					content : js.node.Fs.readFileSync('$path/$_').toString()
 				});

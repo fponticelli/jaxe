@@ -3,6 +3,7 @@ package jaxe.core;
 import jaxe.core.Nodes;
 import jaxe.core.Token;
 using thx.Arrays;
+using thx.Functions;
 using thx.MapList;
 
 class Node {
@@ -39,7 +40,7 @@ class Block extends Node {
   override function toObject() : NodeObject {
     var o = super.toObject();
     o.type = "block";
-    o.nodes = nodes.pluck(_.toObject());
+    o.nodes = nodes.map.fn(_.toObject());
     return o;
   }
 }
