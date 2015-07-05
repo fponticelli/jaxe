@@ -29,7 +29,10 @@ class Parser {
         case TNewline: // advance();
         case TTag(name, selfClosing):
           block.nodes.push(parseTag(name, selfClosing, next.pos));
-        case other: error('Not Implemented Yet: $other', next.pos);
+        case TTextHtml(html):
+          block.nodes.push(parseTextHtml(html, next.pos));
+        case other:
+          error('Not Implemented Yet: $other', next.pos);
       }
     }
 
@@ -39,6 +42,11 @@ class Parser {
   function parseComment(pos : Position) {
     var text = parseTextBlock();
     return new Comment(text, pos);
+  }
+
+  function parseTextHtml(html : String, pos : Position) {
+    html += parseTextBlock();
+    return new Html(html, pos);
   }
 
   function parseTextBlock() {
@@ -106,6 +114,9 @@ class Parser {
 
   function parseText(text : String, pos : Position)
     return new Text(parseTextBlock(), pos);
+
+  function parseHtml(html : String, pos : Position)
+    return new Html(parseTextBlock(), pos);
 
   // utility
   inline function advance()
