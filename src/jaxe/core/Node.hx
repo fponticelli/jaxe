@@ -105,7 +105,7 @@ class Text extends Node {
 
   override function toObject() : NodeObject {
     var o = super.toObject();
-    o.type = "test";
+    o.type = "text";
     o.content = content;
     return o;
   }
