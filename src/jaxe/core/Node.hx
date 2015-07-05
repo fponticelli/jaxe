@@ -116,16 +116,16 @@ class DoctypeNode extends Node {
     if(ob.type != "doctype") throw new ParserParseError('Doctype.fromObject is working on wrong type.');
     var doctype = switch ob.doctype {
           case "default": DefaultDoctype;
-    			case "html": HtmlDoctype;
-    			case "xml": XmlDoctype;
-    			case "transitional": XhtmlTransitionalDoctype;
-    			case "strict": XhtmlStrictDoctype;
-    			case "frameset": XhtmlFramesetDoctype;
-    			case "1.1": Xhtml11Doctype;
-    			case "basic": BasicDoctype;
-    			case "mobile": MobileDoctype;
+          case "html": HtmlDoctype;
+          case "xml": XmlDoctype;
+          case "transitional": XhtmlTransitionalDoctype;
+          case "strict": XhtmlStrictDoctype;
+          case "frameset": XhtmlFramesetDoctype;
+          case "1.1": Xhtml11Doctype;
+          case "basic": BasicDoctype;
+          case "mobile": MobileDoctype;
         case "custom": CustomDoctype(ob.customType);
-    			case unknown: throw new LexerParseError('unknown doctype $unknown');
+          case unknown: throw new LexerParseError('unknown doctype $unknown');
         };
     return new DoctypeNode(doctype, ob.pos);
   }
