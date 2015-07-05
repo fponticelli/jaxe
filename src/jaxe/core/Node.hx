@@ -91,6 +91,26 @@ class Tag extends Block {
   }
 }
 
+class Html extends Node {
+  public static function fromObject(ob : NodeObject) {
+    if(ob.type != "html") throw new ParserParseError('Html.fromObject is working on wrong type.');
+    return new Html(ob.content, ob.pos);
+  }
+
+  public var content : String;
+  public function new(content : String, position : Position) {
+    super(position);
+    this.content = content;
+  }
+
+  override function toObject() : NodeObject {
+    var o = super.toObject();
+    o.type = "html";
+    o.content = content;
+    return o;
+  }
+}
+
 class Text extends Node {
   public static function fromObject(ob : NodeObject) {
     if(ob.type != "text") throw new ParserParseError('Text.fromObject is working on wrong type.');
